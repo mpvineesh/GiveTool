@@ -1,0 +1,5 @@
+.tickets li:nth-child(even) {background: #08c}
+.tickets li:nth-child(odd) {background: #eb3c00 }
+.help-inline{
+color:red;
+}
