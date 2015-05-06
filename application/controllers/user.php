@@ -62,6 +62,19 @@ class User extends MY_Controller {
 	         
 	}
 	
+	public function changestatus()
+	{
+		if($this->input->post()){
+			$this->load->model('mUser');
+			$orguser = $this->input->post('int_org_user_id');
+			$row = $this->mUser->getorganizationuser($orguser);			
+			$status = ($row->chr_status == 'A')?'I':'A';
+			$data['chr_status'] = $status;
+			$this->mUser->editorguser( $orguser, $data);
+			echo json_encode(array('success'=>'true', 'status'=>$status)); exit;
+		}		
+	}
+
 	public function editorganization($int_org_id) {
 	
 		$this->checklogin();
