@@ -17,23 +17,23 @@ class Login extends MY_Controller {
 		$base_url = $CI->config->config['base_url'];
 		$url = $CI->config->config['base_site_url'];
 		$this->load->model('mLogin'); 
-		//$username = $_POST['username'];
-		//$password = $_POST['password'];
-		//$user  = $this->user_model->checklogin($username,$password); 
+		$username = $_POST['username'];
+		$password = $_POST['password'];
+		$user  = $this->mLogin->checklogin($username,$password); 
 		$res = 1; 
-		//if(count($user) ==0 )
-		//	$res = 0;
+		if(count($user) ==0 )
+			$res = 0;
 		if($res == 0){
 			header('Location:'.$url.'?loginfailed'); 
 		}else{  
-			/*$this->session->set_userdata('loggedin', '1');
+			$this->session->set_userdata('loggedin', '1');
 			$this->session->set_userdata('user_type', $user[0]->int_user_type_id);
 			$this->session->set_userdata('int_user_id', $user[0]->int_user_id);
-			$this->session->set_userdata('int_merchant_id', $user[0]->int_merchant_id);*/
+			$this->session->set_userdata('name', 'Administrator');
 			
-			$this->session->set_userdata('loggedin', '1');
+			/*$this->session->set_userdata('loggedin', '1');
 			$this->session->set_userdata('user_type', 'admin');
-			$this->session->set_userdata('int_user_id', '1');
+			$this->session->set_userdata('int_user_id', '1');*/
 			
 			$user_data = $this->session->all_userdata();  
 			header('Location:'.$url.'/dashboard');  

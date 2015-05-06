@@ -17,13 +17,16 @@
 $config['resource_path']= 'aaa';
 $islocal = strpos($_SERVER['HTTP_HOST'], 'localhost');
 if($islocal !== false){
-	$config['resource_path'] = 'http://localhost:8081/QGGT/resources';
+	$config['resource_path'] = 'http://localhost:8081/GiveTool/resources';
+	$config['site_title']='Quite Giant';
+	$config['base_site_url']='http://localhost:8081/GiveTool/index.php';
+	$config['base_path'] = 'http://localhost:8081/GiveTool';
 }else{
-	$config['resource_path'] = 'http://smartipage.com.md-in-9.webhostbox.net/QGGT/admin/resources';
+	$config['resource_path'] = 'http://testsite.sitespace.co.in/resources';
+	$config['site_title']='Quite Giant';
+	$config['base_site_url']='http://testsite.sitespace.co.in/index.php';
+	$config['base_path'] = 'http://testsite.sitespace.co.in';
 }
-$config['site_title']='Quite Giant';
-$config['base_site_url']='http://localhost:8081/QGGT/index.php';
-$config['base_path'] = 'http://localhost:8081/QGGT';
 /*
 |--------------------------------------------------------------------------
 | File Stream Modes

@@ -52,9 +52,9 @@ if($_SERVER['SERVER_NAME'] == "localhost"){
 	$db['default']['password'] = '';
 	$db['default']['database'] = 'givetool';
 }else{
-	$db['default']['username'] = 'smartgln_root';
-	$db['default']['password'] = 'smartipage';
-	$db['default']['database'] = 'smartgln_smartipage';
+	$db['default']['username'] = 'givetool';
+	$db['default']['password'] = 'givetool';
+	$db['default']['database'] = 'givetool';
 
 }
 $db['default']['hostname'] = 'localhost';
