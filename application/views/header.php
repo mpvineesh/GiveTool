@@ -30,6 +30,7 @@
 	<!-- end: CSS -->
 	
 	
+	<link id="base-style-responsive" href="<?php echo $path;?>/css/bootstrap-timepicker.min.css" rel="stylesheet">
 	<link id="bootstrap-style" href="<?php echo $path;?>/css/custom.css" rel="stylesheet">
 	<!-- The HTML5 shim, for IE6-8 support of HTML5 elements -->
 	<!--[if lt IE 9]>
@@ -354,6 +355,7 @@
 						<!--<li><a href="<?php echo $base_site_url;?>/user/organization"><i class="icon-tasks"></i><span class="hidden-tablet"> Organizations</span></a></li>	-->		
 						<li><a href="<?php echo $base_site_url;?>/user/manageorg"><i class="icon-tasks"></i><span class="hidden-tablet"> Organization Mgmnt</span></a></li>	
 						<li><a href="<?php echo $base_site_url;?>/user/manageusers"><i class="icon-tasks"></i><span class="hidden-tablet"> User Mgmnt</span></a></li>	
+						<li><a href="<?php echo $base_site_url;?>/event/manage"><i class="icon-tasks"></i><span class="hidden-tablet"> Event Mgmnt</span></a></li>	
 						<li><a href="<?php echo $base_site_url;?>/user/logout"><i class="icon-lock"></i><span class="hidden-tablet"> Logout</span></a></li>
 					</ul>
 				</div>

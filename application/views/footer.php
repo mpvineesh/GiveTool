@@ -129,6 +129,7 @@
 	<script src="<?php echo $path;?>/js/validate.js"></script>
 
 	<script src="<?php echo $path;?>/js/custom.js"></script>
+	<script src="<?php echo $path;?>/js/bootstrap-timepicker.min.js"></script>
 	<!-- end: JavaScript-->
 	<script type="text/javascript">
 		$(document).ready(function() {
@@ -142,6 +143,10 @@
 				}				
 			});
 		});
+	</script>
+	<script type="text/javascript">
+		$('#starttime').timepicker();
+		$('#endtime').timepicker();
 	</script>
 </body>
 </html>
