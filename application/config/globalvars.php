@@ -21,11 +21,13 @@ if($islocal !== false){
 	$config['site_title']='Quite Giant';
 	$config['base_site_url']='http://localhost:8081/GiveTool/index.php';
 	$config['base_path'] = 'http://localhost:8081/GiveTool';
+	$config['base_url'] = 'http://localhost:8081/GiveTool';
 }else{
 	$config['resource_path'] = 'http://testsite.sitespace.co.in/resources';
 	$config['site_title']='Quite Giant';
 	$config['base_site_url']='http://testsite.sitespace.co.in/index.php';
 	$config['base_path'] = 'http://testsite.sitespace.co.in';
+	$config['base_url'] = 'http://testsite.sitespace.co.in';
 }
 /*
 |--------------------------------------------------------------------------

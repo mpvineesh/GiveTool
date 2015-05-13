@@ -18,13 +18,24 @@ class Event extends MY_Controller {
 		$this->load->model('mEvent');	
 		$events = $this->mEvent->getevents(); 	
 		$data = array();
-		$data['organizations'] = '';		
+		$data['organizations'] = '';		                          
 		$data['events'] = $events ;		
 		$this->load->view('header');
 		$this->load->view('event-list',$data);
 		$this->load->view('footer');	         
 	}
 	
+	public function activeevents() {	
+		$this->checklogin();		
+		$this->load->model('mEvent');	
+		$events = $this->mEvent->getactiveevents(); 	
+		$data = array();
+		$data['organizations'] = '';		
+		$data['events'] = $events ;		
+		$this->load->view('header');
+		$this->load->view('event-list',$data);
+		$this->load->view('footer');	         
+	}
 	public function add() {	
 		$this->checklogin();		
 		$this->load->model('mEvent');
@@ -34,8 +45,8 @@ class Event extends MY_Controller {
 		$this->load->view('event-add',$data);
 		$this->load->view('footer');	         
 	}
-	public function eventadd()
-	{
+	
+	public function eventadd(){
 		$CI =& get_instance(); 
 		$url = $CI->config->config['base_site_url'];
 		$this->load->model('mEvent');
@@ -45,13 +56,15 @@ class Event extends MY_Controller {
 		$str_name = $this->input->post('str_name');
 		$int_event_type_id = $this->input->post('int_event_type_id');
 		$str_description = $this->input->post('str_description');
-		$start_date = $this->input->post('start_date');
-		$start_time = $this->input->post('start_time');
-		$end_date = $this->input->post('end_date');
-		$end_time = $this->input->post('end_time');		
+		$start_date = date("Y-m-d", strtotime($this->input->post('start_date')));
+		$start_time = $this->input->post('start_time'); 
+		$start_time = date("G:i", strtotime($start_time));
+		$end_date = date("Y-m-d", strtotime($this->input->post('end_date')));
+		$end_time = $this->input->post('end_time');	
+		$end_time = date("G:i", strtotime($end_time));	
 		$img_logo = $this->input->post('img_logo');
-		$int_event_user_id = $this->input->post('img_logo');		
-		
+		$int_event_user_id = $this->input->post('int_event_user_id');
+		//echo date('h:i A', strtotime($end_time));exit;
 		/* --------------End Get Form Variables --------------*/
 		/* ------------------Add Event ------------------------*/
 		$eventdata = array();
@@ -62,42 +75,81 @@ class Event extends MY_Controller {
 		$eventdata['tbl_event.start_time'] = $start_time;
 		$eventdata['tbl_event.end_date'] = $end_date;
 		$eventdata['tbl_event.end_time'] = $end_time;
+		$eventdata['tbl_event.date_created'] = date('Y-m-d');
+		$eventdata['tbl_event.chr_status'] = 'A';
 		$eventdata['tbl_event.int_event_user_id'] = $int_event_user_id;
-		$str_logo_image  = '';
 		$int_event_id = $this->mEvent->add($eventdata);
+		var_dump($_FILES['img_logo']);exit;
+		/* ------------------ Upload Logo Image ------------------------*/
+		if(isset($_FILES['img_logo']) && $_FILES['img_logo']['name'] !='' && strlen($_FILES['img_logo']['name'])){ 
+			$imgarray['img_logo'] = $_FILES['img_logo'];
+			$imgupload[0] = $this->imageupload($imgarray,'img_logo','event',$int_event_id);var_dump($imgupload[0]);exit;
+			$str_logo_image =  $imgupload[0]['content'];
+			
+			$eventdata['tbl_event.str_logo'] = $str_logo_image;
+			$int_event_id = $this->mEvent->edit($int_event_id,$eventdata);
+		} 
+		
+		header('Location:'.$url.'/event/manage'); 
+	}
+	
+	public function eventupdate(){
+		$CI =& get_instance(); 
+		$url = $CI->config->config['base_site_url'];
+		$this->load->model('mEvent');
+		
+		/*--------------Begin Get Form Variables --------------*/
+		
+		$str_name = $this->input->post('str_name');
+		$int_event_type_id = $this->input->post('int_event_type_id');
+		$str_description = $this->input->post('str_description');
+		$start_date = date("Y-m-d", strtotime($this->input->post('start_date')));
+		$start_time = $this->input->post('start_time'); 
+		$start_time = date("G:i", strtotime($start_time));
+		$end_date = date("Y-m-d", strtotime($this->input->post('end_date')));
+		$end_time = $this->input->post('end_time');	
+		$end_time = date("G:i", strtotime($end_time));	
+		$img_logo = $this->input->post('img_logo');
+		$int_event_user_id = $this->input->post('int_event_user_id');
+		$int_event_id = $this->input->post('int_event_id');
+		//echo date('h:i A', strtotime($end_time));exit;
+		/* --------------End Get Form Variables --------------*/
+		/* ------------------Add Event ------------------------*/
+		$eventdata = array();
+		$eventdata['tbl_event.str_name'] = $str_name;
+		$eventdata['tbl_event.int_event_type_id'] = $int_event_type_id;
+		$eventdata['tbl_event.str_description'] = $str_description;
+		$eventdata['tbl_event.start_date'] = $start_date;
+		$eventdata['tbl_event.start_time'] = $start_time;
+		$eventdata['tbl_event.end_date'] = $end_date;
+		$eventdata['tbl_event.end_time'] = $end_time;
+		$eventdata['tbl_event.date_created'] = date('Y-m-d');
+		$eventdata['tbl_event.chr_status'] = 'A';
+		$eventdata['tbl_event.int_event_user_id'] = $int_event_user_id;
 		
 		/* ------------------ Upload Logo Image ------------------------*/
 		if(isset($_FILES['img_logo']) && $_FILES['img_logo']['name'] !='' && strlen($_FILES['img_logo']['name'])){ 
 			$imgarray['img_logo'] = $_FILES['img_logo'];
 			$imgupload[0] = $this->imageupload($imgarray,'img_logo','event',$int_event_id);
-			$str_logo_image =  $imgupload[0]['content'];
+			$str_logo_image =  $imgupload[0]['content'];			
+			$eventdata['tbl_event.str_logo'] = $str_logo_image;
+			
 		} 
-		
-		
-		$orgdata['tbl_event.str_logo'] = $str_logo_image;
 		$int_event_id = $this->mEvent->edit($int_event_id,$eventdata);
-		
-		
 		header('Location:'.$url.'/event/manage'); 
 	}
-	
-	
-	
-	
-	
-	public function addorganization() {
 		
-		
-		$this->checklogin();
-		
-		$this->load->model('mUser');
-		 
-		$data['title'] = 'Edit Organization User';
-		
-		
+	public function eventedit($int_event_id) {
+				
+		$this->checklogin();		
+		$this->load->model('mEvent');
+		$event = $this->mEvent->geteventbyid($int_event_id);
+		$data = array();		
+		$data['event'] = $event;
+		$data['title'] = 'Edit Event';
 		$this->checklogin();
 		$this->load->view('header');
-		$this->load->view('org-add');
+		$this->load->view('event-edit',$data );
 		$this->load->view('footer');
 	         
 	}
@@ -436,7 +488,7 @@ class Event extends MY_Controller {
 	public function imageupload($img,$fieldname,$dir,$id)
 	{
 		$session_id='1'; //$session id
-		$path = "uploads/org/".$id."/";
+		$path = "uploads/events/".$id."/";
 		
 		if (!file_exists($path)) {
 			mkdir($path, 0777, true); 

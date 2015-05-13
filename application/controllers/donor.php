@@ -2,30 +2,19 @@
 
  
 
-class User extends MY_Controller {
+class Donor extends MY_Controller {
 
 	 
-	public function index() {
 	
-		$this->checklogin();
-		$this->load->view('includes/header');
-		$this->load->view('home');
-		$this->load->view('includes/footer');
-	         
-	}
-	
-	public function organization() {
+	public function manage() {
 	
 		$this->checklogin();
 		
-		$this->load->model('mUser');
-		$organizations = $this->mUser->getorganizations();
-		
+		$this->load->model('mDonor');
 		$data = array();
-		$data['organizations'] = $organizations;
 		
 		$this->load->view('header');
-		$this->load->view('org-list',$data);
+		$this->load->view('donor-list',$data);
 		$this->load->view('footer');
 	         
 	}

@@ -44,14 +44,16 @@
 										echo '<tr>
 												<td>'.$item->str_name.'</td>
 												<td class="center">'.$item->str_name.'</td>
-												<td class="center">'.$item->str_name.'</td>
+												<td class="center">'.$item->start_date.' to '.$item->end_date.'</td>
 												<td class="center">
 													<span class="label label-success">Active</span>
 												</td>
 												<td class="center">
-													<a href="'.$url.'/index.php/user/edituser/'.$item->int_event_id.'"><button class="btn btn-mini btn-primary">Edit</button></a>
+													<a href="'.$url.'/index.php/event/eventedit/'.$item->int_event_id.'"><button class="btn btn-mini btn-primary">Edit</button></a>
 													<a href="'.$url.'/index.php/user/viewuser/'.$item->int_event_id.'" class="btn btn-mini btn-success">View</a>
 													<a href="'.$url.'/index.php/user/deleteorguser/'.$item->int_event_id.'" onclick="return confirmdelete();"><button class="btn btn-mini btn-danger">Delete</button></a>
+													<a href="##" class="btn btn-mini btn-warning btn-configure-event">Configure</a>
+													
 												</td>
 											</tr>		';
 									}

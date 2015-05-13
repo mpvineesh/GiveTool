@@ -6,7 +6,55 @@
 ?>
 </div><!--/#content.span10-->
 		</div><!--/fluid-row-->
-		
+	<div class="modal hide fade" id="configureEvent">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal">
+				<a class="btn-close" href="#"><i class="halflings-icon remove"></i></a>
+			</button>
+			<h3>Configure Event Denomination</h3>
+		</div>
+		<div class="modal-body">
+		<form class="form-horizontal" method="post" action="/user/orgadd">
+			<fieldset>
+				<div class="control-group">
+					<label class="control-label" for="focusedInput">Denomination 1</label>
+					<div class="controls">
+					  <input class="input-xlarge" id="focusedInput" type="text" name="str_denomination1" value="" placeholder="Event Denomination 1">
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="focusedInput">Denomination 2</label>
+					<div class="controls">
+					  <input class="input-xlarge" id="focusedInput" type="text" name="str_denomination1" value="" placeholder="Event Denomination 1">
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="focusedInput">Denomination 3</label>
+					<div class="controls">
+					  <input class="input-xlarge" id="focusedInput" type="text" name="str_denomination1" value="" placeholder="Event Denomination 1">
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="focusedInput">Denomination 4</label>
+					<div class="controls">
+					  <input class="input-xlarge" id="focusedInput" type="text" name="str_denomination1" value="" placeholder="Event Denomination 1">
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="focusedInput">Denomination 5</label>
+					<div class="controls">
+					  <input class="input-xlarge" id="focusedInput" type="text" name="str_denomination1" value="" placeholder="Event Denomination 1">
+					</div>
+				</div>
+			 
+			</fieldset>
+				</form>   
+		</div>
+		<div class="modal-footer">
+			<a href="#" class="btn" data-dismiss="modal">Close</a>
+			<a href="#" class="btn btn-primary">Save changes</a>
+		</div>
+	</div>		
 	<div class="modal hide fade" id="myModal">
 		<div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal">×</button>

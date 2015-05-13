@@ -76,7 +76,13 @@
 						  <input class="input-xlarge" id="confirm-password" type="password" name="str_password1" title="Retype Password" validate="text" value="<?php echo $orguser->str_password;?>" placeholder="Confirm Password">
 						  <span class="help-inline" id="confirm-password_msg"></span>
 						</div>
-					 </div>                			
+					 </div>   
+					<div class="control-group">
+						<label class="control-label">Enable Admin Privilages</label>
+						<div class="controls"> 
+							<input type="checkbox" <?php if($orguser->bit_is_admin ==1) echo 'checked="checked"'; ?> name="bit_is_admin" value="1"> 
+						</div>
+					 </div>
 					<div class="form-actions">
 					  <button type="submit" name="btn_add" class="btn btn-primary" onClick="return validateForm('useradd')";>Save</button>
 					  <button type="reset" class="btn goback">Cancel</button>

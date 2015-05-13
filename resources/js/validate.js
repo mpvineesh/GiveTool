@@ -176,3 +176,32 @@ validateEmail=function(email){
 	var pattern = new RegExp(/^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i);
 	return pattern.test(email);
 }
+
+
+
+
+
+$('#password').live("keyup",function(e) {
+     var strongRegex = new RegExp("^(?=.{8,})(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*\\W).*$", "g");
+     var mediumRegex = new RegExp("^(?=.{7,})(((?=.*[A-Z])(?=.*[a-z]))|((?=.*[A-Z])(?=.*[0-9]))|((?=.*[a-z])(?=.*[0-9]))).*$", "g");
+     var enoughRegex = new RegExp("(?=.{6,}).*", "g");
+     if (false == enoughRegex.test($(this).val())) {
+             $('#passstrength').html('Minimum 6 Character');
+     } else if (strongRegex.test($(this).val())) {
+			 $('#passstrength').removeClass('red-text');
+			 $('#passstrength').removeClass('blue-text');
+			 $('#passstrength').addClass('green-text');
+             $('#passstrength').html('Strong!');
+     } else if (mediumRegex.test($(this).val())) {
+			 $('#passstrength').removeClass('green-text');
+			 $('#passstrength').removeClass('red-text');
+			 $('#passstrength').addClass('blue-text');
+             $('#passstrength').html('Medium!');
+     } else {
+			 $('#passstrength').removeClass('green-text');
+			 $('#passstrength').removeClass('blue-text');
+			 $('#passstrength').addClass('red-text');
+             $('#passstrength').html('Weak!');
+     }
+     return true;
+});

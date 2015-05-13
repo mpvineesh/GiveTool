@@ -69,6 +69,7 @@
 						<label class="control-label" for="password">Password</label>
 						<div class="controls">
 						  <input class="input-xlarge" id="password" type="password" name="str_password" title="Password" validate="text"  value="" placeholder="Password">
+						  <span class="help-inline" id="passstrength"></span>
 						  <span class="help-inline" id="password_msg"></span>
 						</div>
 					 </div>    
@@ -78,7 +79,15 @@
 						  <input class="input-xlarge" id="confirm-password" type="password" name="str_password1" title="Retype Password" validate="text"  value="" placeholder="Confirm Password">
 						  <span class="help-inline" id="confirm-password_msg"></span>
 						</div>
-					 </div>                			
+					 </div>    
+					<div class="control-group">
+						<label class="control-label">Enable Admin Privilages</label>
+						<div class="controls">
+						  <label class="checkbox inline">
+							<div class="checker" id="uniform-inlineCheckbox1"><span><input type="checkbox" name="bit_is_admin" value="1" id="inlineCheckbox1"></span></div> 
+						  </label>
+						</div>
+					  </div>
 					<div class="form-actions">
 					  <button type="submit" name="btn_add" class="btn btn-primary" onClick="return validateForm('useradd')";>Save</button>
 					  <button type="reset" class="btn goback">Cancel</button>

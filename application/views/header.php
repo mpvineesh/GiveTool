@@ -355,7 +355,15 @@
 						<!--<li><a href="<?php echo $base_site_url;?>/user/organization"><i class="icon-tasks"></i><span class="hidden-tablet"> Organizations</span></a></li>	-->		
 						<li><a href="<?php echo $base_site_url;?>/user/manageorg"><i class="icon-tasks"></i><span class="hidden-tablet"> Organization Mgmnt</span></a></li>	
 						<li><a href="<?php echo $base_site_url;?>/user/manageusers"><i class="icon-tasks"></i><span class="hidden-tablet"> User Mgmnt</span></a></li>	
-						<li><a href="<?php echo $base_site_url;?>/event/manage"><i class="icon-tasks"></i><span class="hidden-tablet"> Event Mgmnt</span></a></li>	
+						<li>
+							<a class="dropmenu" href="#" id="org"><i class="icon-folder-close-alt"></i><span class="hidden-tablet"> Event Mgmnt(<span class="sign_org">+</span>)</span></a>
+							<ul>
+								<li><a class="submenu" href="<?php echo $base_site_url;?>/event/activeevents"><i class="icon-list"></i><span class="hidden-tablet"> Active Events</span></a></li>
+								<li><a class="submenu" href="<?php echo $base_site_url;?>/event/eventhistory"><i class="icon-list"></i><span class="hidden-tablet"> Events History</span></a></li>
+								<li><a class="submenu" href="<?php echo $base_site_url;?>/event/eventusers"><i class="icon-list"></i><span class="hidden-tablet"> Event Users</span></a></li>
+							</ul>	
+						</li>
+						<li><a href="<?php echo $base_site_url;?>/donor/manage"><i class="icon-lock"></i><span class="hidden-tablet"> Donor Details</span></a></li>
 						<li><a href="<?php echo $base_site_url;?>/user/logout"><i class="icon-lock"></i><span class="hidden-tablet"> Logout</span></a></li>
 					</ul>
 				</div>

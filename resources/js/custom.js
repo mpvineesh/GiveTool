@@ -407,6 +407,12 @@ function template_functions(){
 		$('#adminSettings').modal('show');
 	});
 	
+	
+	$('.btn-configure-event').live('click',function(e){
+		e.preventDefault();
+		$('#configureEvent').modal('show');
+	});
+	
 	/* ---------- Progress  ---------- */
 
 		$(".simpleProgress").progressbar({
