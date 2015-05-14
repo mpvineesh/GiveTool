@@ -45,32 +45,27 @@ class User extends MY_Controller {
 	         
 	}
 	
-	public function addorganization() {
+	public function addorganization() {		
 		
-		
-		$this->checklogin();
-		
-		$this->load->model('mUser');
-		 
-		$data['title'] = 'Edit Organization User';
-		
+		$this->checklogin();		
+		$this->load->model('mUser');		 
+		$data['title'] = 'Edit Organization User';		
 		
 		$this->checklogin();
 		$this->load->view('header');
 		$this->load->view('org-add');
-		$this->load->view('footer');
-	         
+		$this->load->view('footer');	         
 	}
 	
 	public function changestatus()
 	{
 		if($this->input->post()){
 			$this->load->model('mUser');
-			$orguser = $this->input->post('int_org_user_id');
-			$row = $this->mUser->getorganizationuser($orguser);			
+			$int_org_user_id = $this->input->post('id');
+			$row = $this->mUser->getorganizationuser($int_org_user_id);	
 			$status = ($row->chr_status == 'A')?'I':'A';
 			$data['chr_status'] = $status;
-			$this->mUser->editorguser( $orguser, $data);
+			$this->mUser->editorguser( $int_org_user_id, $data);
 			echo json_encode(array('success'=>'true', 'status'=>$status)); exit;
 		}		
 	}
@@ -103,8 +98,7 @@ class User extends MY_Controller {
 
 	public function adduser() {
 	
-		//$this->checklogin();
-		
+		$this->checklogin();
 		$this->load->model('mUser');
 		$orgs = $this->mUser->getorganizations();
 		$orguser = $this->mUser->getorganizationuser(1);
@@ -122,8 +116,7 @@ class User extends MY_Controller {
 	
 	public function edituser($int_org_user_id) {
 	
-		//$this->checklogin();
-		
+		$this->checklogin();
 		$this->load->model('mUser');
 		$orgs = $this->mUser->getorganizations();
 		$orguser = $this->mUser->getorganizationuser($int_org_user_id);
@@ -141,8 +134,7 @@ class User extends MY_Controller {
 
 	public function viewuser($int_org_user_id) {
 	
-		//$this->checklogin();
-		
+		$this->checklogin();
 		$this->load->model('mUser');
 		$orgs = $this->mUser->getorganizations();
 		$orguser = $this->mUser->getorganizationuserdetail($int_org_user_id);
@@ -150,12 +142,10 @@ class User extends MY_Controller {
 		$data['orgs'] = $orgs;
 		$data['orguser'] = $orguser;
 		$data['int_org_user_id'] = $int_org_user_id;
-		$data['title'] = 'View Organization User';
-		
+		$data['title'] = 'View Organization User';		
 		$this->load->view('header');
 		$this->load->view('user-view',$data);
-		$this->load->view('footer');
-	         
+		$this->load->view('footer');	         
 	}
 
 	public function manageusers() {
@@ -164,9 +154,8 @@ class User extends MY_Controller {
 		$users = $this->mUser->getorgusers();
 		$data = array();
 		$data['users'] = $users;
-		$data['title'] = 'Organization Users';
-		
-		//$this->checklogin();
+		$data['title'] = 'Organization Users';		
+		$this->checklogin();
 		$this->load->view('header');
 		$this->load->view('manage-users',$data);
 		$this->load->view('footer');
@@ -209,47 +198,19 @@ class User extends MY_Controller {
 		header('Location:'.$url); 
 	}
 	
-	public function edit($userid)
-	{	
-		$this->checklogin();
-		$this->load->model('demo_model');
-		$user = $this->demo_model->getuser($userid);
-		
-		$data = array();
-		$data['user'] = $user;
-		$data['id'] = 1;
-		$this->load->view('update',$data);
-		//$this->load->view('welcome_message');
-	}
-	public function delete($userid)
-	{	
-		$this->checklogin();
-		$CI =& get_instance(); 
-		$url = $CI->config->config['base_url'];
-		$this->load->model('demo_model');
-		$user = $this->demo_model->delete($userid);
-		
-		$data = array();
-		$data['user'] = $user;
-		$data['id'] = 1;
-		header('Location:'.$url.'index.php/demo/listusers'); 
-	//	$this->load->view('edit_form',$data);
-		//$this->load->view('welcome_message');
-	}
+	
 	public function saveorguser()
 	{
 		$CI =& get_instance(); 
 		$url = $CI->config->config['base_site_url'];
-		$this->load->model('mUser');
-		
-		
-		
+		$this->load->model('mUser');		
 		/*--------------Begin Get Form Variables --------------*/
 		
 		$str_name = $this->input->post('str_name');
 		$str_email = $this->input->post('str_email');
 		$str_password = $this->input->post('str_password');
 		$int_org_user_id = $this->input->post('int_org_user_id');
+		$int_user_id = $this->input->post('int_user_id');
 		$int_organization_id = $this->input->post('int_organization_id');
 		if(isset($_POST["bit_is_admin"]))
 			$bit_is_admin = $this->input->post('bit_is_admin');
@@ -261,22 +222,23 @@ class User extends MY_Controller {
 		$userdata = array();
 		$userdata['tbl_user.str_login'] = $str_email;
 		$userdata['tbl_user.str_password'] = $str_password;
-		$userdata['tbl_user.int_user_type_id'] = 2; // 2- Organization/University
-		
-		$int_user_id = $this->mUser->add($userdata);
+		$userdata['tbl_user.int_user_type_id'] = 2; // 2- Organization/University		
 		
 		/* ------------------Add Organization ------------------------*/
 		$orguserdata = array();
 		$orguserdata['tbl_org_user.str_name'] = $str_name;
 		$orguserdata['tbl_org_user.str_email'] = $str_email;
 		$orguserdata['tbl_org_user.str_password'] = $str_password;
-		$orguserdata['tbl_org_user.int_user_id'] = 0;
 		$orguserdata['tbl_org_user.int_organization_id'] = $int_organization_id; 
 		$orguserdata['tbl_org_user.bit_is_admin'] = $bit_is_admin;
+		$orguserdata['tbl_org_user.chr_status'] = 'A';
 		if($int_org_user_id > 0){ 
 			$orguserdata['tbl_org_user.int_org_user_id'] = $int_org_user_id;
+			$int_user_id = $this->mUser->edit($int_user_id,$userdata);
 			$int_org_user_id = $this->mUser->editorguser($int_org_user_id,$orguserdata);
 		}else{
+			$int_user_id = $this->mUser->add($userdata);
+			$orguserdata['tbl_org_user.int_user_id'] = $int_user_id;			
 			$int_org_user_id = $this->mUser->addorguser($orguserdata);
 		}
 		header('Location:'.$url.'/user/manageusers'); 
@@ -305,13 +267,13 @@ class User extends MY_Controller {
 		$str_zip = $this->input->post('str_zip');	
 		
 		/* --------------End Get Form Variables --------------*/
-		/* ------------------Add User ------------------------*/
+		/* ------------------Add User ------------------------ 
 		$userdata = array();
 		$userdata['tbl_user.str_login'] = $str_email;
 		$userdata['tbl_user.str_password'] = 'password';
 		$userdata['tbl_user.int_user_type_id'] = 2; // 2- Organization/University
 		$int_user_id = $this->mUser->add($userdata);
-		/* ------------------Add Organization ------------------------*/
+		------------------Add Organization ------------------------*/
 		$orgdata = array();
 		$orgdata['tbl_organization.int_user_id'] = $int_user_id;
 		$orgdata['tbl_organization.str_name'] =  $str_name;
@@ -324,7 +286,7 @@ class User extends MY_Controller {
 		$orgdata['tbl_organization.date_added'] = date('Y-m-d');
 		$orgdata['tbl_organization.date_modified'] = date('Y-m-d');
 		$orgdata['tbl_organization.chr_status'] = 'A';
-		$orgdata['tbl_organization.int_user_id'] = $int_user_id;
+		$orgdata['tbl_organization.int_user_id'] = 0;
 		$int_organization_id = $this->mUser->addorganization($orgdata);
 		
 		/* ------------------ Upload Logo Image ------------------------*/
@@ -398,11 +360,13 @@ class User extends MY_Controller {
 		$CI =& get_instance(); 
 		$url = $CI->config->config['base_url'];
 		$this->load->model('mUser');
-		$user = $this->mUser->deleteorguser($int_org_user_id);
 		
-		header('Location:'.$url.'index.php/user/manageusers'); 
-	//	$this->load->view('edit_form',$data);
-		//$this->load->view('welcome_message');
+		$row = $this->mUser->getorganizationuser($int_org_user_id);		
+		$int_user_id = $row->int_user_id;
+				
+		$this->mUser->deleteuser($int_user_id);		
+		$user = $this->mUser->deleteorguser($int_org_user_id);		
+		header('Location:'.$url.'/index.php/user/manageusers'); 
 	}
 	public function deleteorg($int_org_id)
 	{	
@@ -410,8 +374,7 @@ class User extends MY_Controller {
 		$CI =& get_instance(); 
 		$url = $CI->config->config['base_url'];
 		$this->load->model('mUser');
-		$user = $this->mUser->deleteorg($int_org_id);
-		
+		$user = $this->mUser->deleteorg($int_org_id);		
 		header('Location:'.$url.'index.php/user/manageorg'); 
 	}
 

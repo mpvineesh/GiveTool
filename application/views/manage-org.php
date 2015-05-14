@@ -47,13 +47,15 @@
 								
 									foreach ($organizations as $item)
 									{ 
+										$className = ($item->chr_status == 'A')?'btn-success':'btn-danger';
+										$status = ($item->chr_status == 'A')?'Active':'Inactive';	//$image=$row['image_name'];
 										//$image=$row['image_name'];
 										echo '<tr>
 												<td>'.$item->str_name.'</td>
 												<td class="center">'.$item->str_short_name.'</td>
 												<td class="center">'.$item->str_email.'</td>
 												<td class="center">
-													<span class="label label-success">Active</span>
+													<a class="btn btn-mini changeStatus '.$className.'"  data="'.$item->int_organization_id.'">'.$status.'</a>
 												</td>
 												<td class="center">
 													<a href="'.$url.'/index.php/user/editorganization/'.$item->int_organization_id.'"><button class="btn btn-mini btn-primary">Edit</button></a>

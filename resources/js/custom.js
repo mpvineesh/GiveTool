@@ -2290,3 +2290,26 @@ function widthFunctions(e) {
 	}
 
 }
+
+
+var url = $('#base-url').val();
+$(document).ready(function(){	
+	$( "table" ).delegate('.changeStatus', 'click', function(){
+		var input = $(this);
+		var id = input.attr('data');  
+		$.ajax({
+			url:'changestatus',
+			data:{id:id},
+			type:"post",
+			dataType:"json",
+			success:function(data){	
+				if(data.success == "true"){
+					var className = (data.status == 'A')?'btn-success':'btn-danger';
+					var statusText = (data.status == 'A')?'Active':'Inactive';
+					var currentClassName = (data.status == 'I')?'btn-success':'btn-danger';
+					input.removeClass(currentClassName).addClass(className).html(statusText);
+				}
+			}
+		});
+	});
+});

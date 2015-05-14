@@ -96,7 +96,7 @@ class Muser extends CI_Model {
 	{
 		$this->load->database();
 		$this->db->where('tbl_org_user.int_org_user_id', $int_org_user_id);
-		$query = $this->db->get('tbl_org_user');		
+		$query = $this->db->get('tbl_org_user'); 
 		$row = $query->row();
 		return $row;		 
 	}  
@@ -112,6 +112,17 @@ class Muser extends CI_Model {
 	function deleteorguser($int_org_user_id){
 		$this->db->where('int_org_user_id', $int_org_user_id); 
 		$result = $this->db->delete('tbl_org_user');
+		// Return bool on success
+		if($result){
+			// Clear the cache file for this room info page
+			return true;
+		} else {
+			return false;
+		}
+	}
+	function deleteuser($int_user_id){
+		$this->db->where('int_user_id', $int_user_id); 
+		$result = $this->db->delete('tbl_user');
 		// Return bool on success
 		if($result){
 			// Clear the cache file for this room info page

@@ -30,7 +30,8 @@ class mLogin extends CI_Model {
 		
 		$this->db->select('*'); // Select field
 		$this->db->from('tbl_user'); // from Table1
-		$this->db->join('tbl_user_type','tbl_user.int_user_type_id = tbl_user_type.int_user_type_id','INNER'); // Join table1 with table2 based on the foreign key
+		//$this->db->join('tbl_user_type','tbl_user.int_user_type_id = tbl_user_type.int_user_type_id','INNER'); // Join table1 with table2 based on the foreign key
+		$this->db->join('tbl_org_user','tbl_org_user.int_user_id = tbl_user.int_user_id','LEFT'); // Join table1 with table2 based on the foreign key
 		$this->db->where('tbl_user.str_login',$username); // Set Filter
 		$this->db->where('tbl_user.str_password',$password); // Set Filter
 		$res = $this->db->get();

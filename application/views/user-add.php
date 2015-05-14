@@ -32,6 +32,7 @@
 			<div class="box-content">
 				<form class="form-horizontal" method="post" id="useradd" action="<?php echo $base_site_url;?>/user/saveorguser">
 					<input type="hidden" name="int_org_user_id" value="<?php echo $int_org_user_id;?>">
+					<input type="hidden" name="int_user_id" value="0">
 				  <fieldset>
 					 <div class="control-group">
 						<label class="control-label" for="selectError3">Organization</label>

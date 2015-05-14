@@ -41,12 +41,14 @@
 									foreach ($events as $item)
 									{ 
 										//$image=$row['image_name'];
+										$className = ($item->chr_status == 'A')?'btn-success':'btn-danger';
+										$status = ($item->chr_status == 'A')?'Active':'Inactive';	//$image=$row['image_name'];
 										echo '<tr>
 												<td>'.$item->str_name.'</td>
 												<td class="center">'.$item->str_name.'</td>
 												<td class="center">'.$item->start_date.' to '.$item->end_date.'</td>
 												<td class="center">
-													<span class="label label-success">Active</span>
+													<a class="btn btn-mini changeStatus '.$className.'"  data="'.$item->int_event_id.'">'.$status.'</a>
 												</td>
 												<td class="center">
 													<a href="'.$url.'/index.php/event/eventedit/'.$item->int_event_id.'"><button class="btn btn-mini btn-primary">Edit</button></a>

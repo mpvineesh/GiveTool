@@ -4,6 +4,8 @@
 	$path = $CI->config->config['resource_path'];
 	$base_path = $CI->config->config['base_path'];
 	$base_site_url = $CI->config->config['base_site_url'];
+	$name = $this->session->userdata("name");
+	$int_user_type = $this->session->userdata("int_user_type");
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -52,6 +54,7 @@
 </head>
 
 <body>
+	<input type="hidden" id="base-url" value="<?php echo $base_site_url;?>">
 		<!-- start: Header -->
 	<div class="navbar">
 		<div class="navbar-inner">
@@ -315,7 +318,7 @@
 						<!-- start: User Dropdown -->
 						<li class="dropdown">
 							<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-								<i class="halflings-icon white user"></i> Admin
+								<i class="halflings-icon white user"></i> <?php echo $name;?>
 								<span class="caret"></span>
 							</a>
 							<ul class="dropdown-menu">
@@ -323,7 +326,7 @@
  									<span>Account Settings</span>
 								</li>
 								<li><a href="#" class="btn-admin-setting"><i class="halflings-icon user "></i> Profile</a></li>
-								<li><a href="login.html"><i class="halflings-icon off"></i> Logout</a></li>
+								<li><a href="<?php echo $base_site_url;?>/user/logout"><i class="halflings-icon off"></i> Logout</a></li>
 							</ul>
 						</li>
 						<!-- end: User Dropdown -->
@@ -353,7 +356,9 @@
 							</ul>	
 						</li>	-->					
 						<!--<li><a href="<?php echo $base_site_url;?>/user/organization"><i class="icon-tasks"></i><span class="hidden-tablet"> Organizations</span></a></li>	-->		
+						<?php if($int_user_type==1){ ;?>
 						<li><a href="<?php echo $base_site_url;?>/user/manageorg"><i class="icon-tasks"></i><span class="hidden-tablet"> Organization Mgmnt</span></a></li>	
+						<?php };?>
 						<li><a href="<?php echo $base_site_url;?>/user/manageusers"><i class="icon-tasks"></i><span class="hidden-tablet"> User Mgmnt</span></a></li>	
 						<li>
 							<a class="dropmenu" href="#" id="org"><i class="icon-folder-close-alt"></i><span class="hidden-tablet"> Event Mgmnt(<span class="sign_org">+</span>)</span></a>

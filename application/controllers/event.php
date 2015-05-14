@@ -157,12 +157,12 @@ class Event extends MY_Controller {
 	public function changestatus()
 	{
 		if($this->input->post()){
-			$this->load->model('mUser');
-			$orguser = $this->input->post('int_org_user_id');
-			$row = $this->mUser->getorganizationuser($orguser);			
+			$this->load->model('mEvent');
+			$int_event_id = $this->input->post('id');
+			$row = $this->mEvent->geteventbyid($int_event_id); 
 			$status = ($row->chr_status == 'A')?'I':'A';
 			$data['chr_status'] = $status;
-			$this->mUser->editorguser( $orguser, $data);
+			$this->mEvent->edit( $int_event_id, $data);
 			echo json_encode(array('success'=>'true', 'status'=>$status)); exit;
 		}		
 	}
