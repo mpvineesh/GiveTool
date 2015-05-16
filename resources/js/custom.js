@@ -410,6 +410,8 @@ function template_functions(){
 	
 	$('.btn-configure-event').live('click',function(e){
 		e.preventDefault();
+		var id = $(this).attr('data');
+		$('#int_event_id_hidden').val(id);
 		$('#configureEvent').modal('show');
 	});
 	
@@ -2300,6 +2302,26 @@ $(document).ready(function(){
 		$.ajax({
 			url:'changestatus',
 			data:{id:id},
+			type:"post",
+			dataType:"json",
+			success:function(data){	
+				if(data.success == "true"){
+					var className = (data.status == 'A')?'btn-success':'btn-danger';
+					var statusText = (data.status == 'A')?'Active':'Inactive';
+					var currentClassName = (data.status == 'I')?'btn-success':'btn-danger';
+					input.removeClass(currentClassName).addClass(className).html(statusText);
+				}
+			}
+		});
+
+
+
+		$( "#saveDenominations" ).live('click', function(){
+		var input = $(this);
+		var formData = $("form#contact-form").serialize();
+		$.ajax({
+			url:'savedenomination',
+			data:formData,
 			type:"post",
 			dataType:"json",
 			success:function(data){	

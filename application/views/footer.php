@@ -14,12 +14,13 @@
 			<h3>Configure Event Denomination</h3>
 		</div>
 		<div class="modal-body">
-		<form class="form-horizontal" method="post" action="/user/orgadd">
+		<form class="form-horizontal" method="post" action="/user/orgadd" id="form-denomination">
+			<input type="hidden" name="int_event_id" id="int_event_id_hidden" value="0">
 			<fieldset>
 				<div class="control-group">
 					<label class="control-label" for="focusedInput">Denomination 1</label>
 					<div class="controls">
-					  <input class="input-xlarge" id="focusedInput" type="text" name="str_denomination1" value="" placeholder="Event Denomination 1">
+					  <input class="input-xmedium" id="focusedInput" type="text" name="str_denomination1" value="" placeholder="Event Denomination 1">
 					</div>
 				</div>
 				<div class="control-group">
@@ -52,7 +53,7 @@
 		</div>
 		<div class="modal-footer">
 			<a href="#" class="btn" data-dismiss="modal">Close</a>
-			<a href="#" class="btn btn-primary">Save changes</a>
+			<a href="#" class="btn btn-primary" id="saveDenominations">Save changes</a>
 		</div>
 	</div>		
 	<div class="modal hide fade" id="myModal">

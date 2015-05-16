@@ -52,9 +52,9 @@
 												</td>
 												<td class="center">
 													<a href="'.$url.'/index.php/event/eventedit/'.$item->int_event_id.'"><button class="btn btn-mini btn-primary">Edit</button></a>
-													<a href="'.$url.'/index.php/user/viewuser/'.$item->int_event_id.'" class="btn btn-mini btn-success">View</a>
-													<a href="'.$url.'/index.php/user/deleteorguser/'.$item->int_event_id.'" onclick="return confirmdelete();"><button class="btn btn-mini btn-danger">Delete</button></a>
-													<a href="##" class="btn btn-mini btn-warning btn-configure-event">Configure</a>
+													<a href="'.$url.'/index.php/event/viewevent/'.$item->int_event_id.'" class="btn btn-mini btn-success">View</a>
+													<a href="'.$url.'/index.php/event/deleteevent/'.$item->int_event_id.'" onclick="return confirmdelete();"><button class="btn btn-mini btn-danger">Delete</button></a>
+													<a href="##" class="btn btn-mini btn-warning btn-configure-event" data="'.$item->int_event_id.'">Configure</a>
 													
 												</td>
 											</tr>		';
