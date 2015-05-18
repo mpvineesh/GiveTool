@@ -48,14 +48,11 @@
 												<td class="center">'.$item->str_name.'</td>
 												<td class="center">'.$item->start_date.' to '.$item->end_date.'</td>
 												<td class="center">
-													<a class="btn btn-mini changeStatus '.$className.'"  data="'.$item->int_event_id.'">'.$status.'</a>
+													<span class="btn btn-mini '.$className.'"  data="'.$item->int_event_id.'">'.$status.'</span>
 												</td>
 												<td class="center">
-													<a href="'.$url.'/index.php/event/eventedit/'.$item->int_event_id.'"><button class="btn btn-mini btn-primary">Edit</button></a>
 													<a href="'.$url.'/index.php/event/viewevent/'.$item->int_event_id.'" class="btn btn-mini btn-success">View</a>
 													<a href="'.$url.'/index.php/event/deleteevent/'.$item->int_event_id.'" onclick="return confirmdelete();"><button class="btn btn-mini btn-danger">Delete</button></a>
-													<a href="##" class="btn btn-mini btn-warning btn-configure-event" data="'.$item->int_event_id.'">Configure</a>
-													<a href="##" class="btn btn-mini  btn-info btn-notify-donors" data="'.$item->int_event_id.'">Notify Donors</a>
 													
 												</td>
 											</tr>		';

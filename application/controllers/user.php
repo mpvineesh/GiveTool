@@ -148,6 +148,21 @@ class User extends MY_Controller {
 		$this->load->view('footer');	         
 	}
 
+	public function profile($int_user_id) {
+	
+		$this->checklogin();
+		$this->load->model('mUser');
+		$user = $this->mUser->getprofile($int_user_id);
+		$data = array();
+		$data['orguser'] = $user;
+		$data['int_user_id'] = $int_user_id;
+		$data['title'] = 'User Profile';		
+		$this->load->view('header');
+		$this->load->view('profile',$data);
+		$this->load->view('footer');	         
+	}
+
+
 	public function manageusers() {
 		
 		$this->load->model('mUser');

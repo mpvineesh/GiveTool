@@ -20,31 +20,56 @@
 				<div class="control-group">
 					<label class="control-label" for="focusedInput">Denomination 1</label>
 					<div class="controls">
-					  <input class="input-xmedium" id="focusedInput" type="text" name="str_denomination1" value="" placeholder="Event Denomination 1">
+						<select name="chr_denomination_type1" class="input-medium">
+							<option value="">Type</option>
+							<option value="A">Amount</option>
+							<option value="P">Percentage</option>
+						</select>
+						<input class="input-medium" id="focusedInput" type="text" name="str_denomination1" value="" placeholder="Event Denomination 1">
 					</div>
 				</div>
 				<div class="control-group">
 					<label class="control-label" for="focusedInput">Denomination 2</label>
 					<div class="controls">
-					  <input class="input-xlarge" id="focusedInput" type="text" name="str_denomination1" value="" placeholder="Event Denomination 1">
+						<select name="chr_denomination_type2" class="input-medium">
+							<option value="">Type</option>
+							<option value="A">Amount</option>
+							<option value="P">Percentage</option>
+						</select>
+					  <input class="input-medium" id="focusedInput" type="text" name="str_denomination2" value="" placeholder="Event Denomination 1">
 					</div>
 				</div>
 				<div class="control-group">
 					<label class="control-label" for="focusedInput">Denomination 3</label>
 					<div class="controls">
-					  <input class="input-xlarge" id="focusedInput" type="text" name="str_denomination1" value="" placeholder="Event Denomination 1">
+						<select name="chr_denomination_type3" class="input-medium">
+							<option value="">Type</option>
+							<option value="A">Amount</option>
+							<option value="P">Percentage</option>
+						</select>
+					  <input class="input-medium" id="focusedInput" type="text" name="str_denomination3" value="" placeholder="Event Denomination 1">
 					</div>
 				</div>
 				<div class="control-group">
 					<label class="control-label" for="focusedInput">Denomination 4</label>
 					<div class="controls">
-					  <input class="input-xlarge" id="focusedInput" type="text" name="str_denomination1" value="" placeholder="Event Denomination 1">
+						<select name="chr_denomination_type4" class="input-medium">
+							<option value="">Type</option>
+							<option value="A">Amount</option>
+							<option value="P">Percentage</option>
+						</select>
+					  <input class="input-medium" id="focusedInput" type="text" name="str_denomination4" value="" placeholder="Event Denomination 1">
 					</div>
 				</div>
 				<div class="control-group">
 					<label class="control-label" for="focusedInput">Denomination 5</label>
 					<div class="controls">
-					  <input class="input-xlarge" id="focusedInput" type="text" name="str_denomination1" value="" placeholder="Event Denomination 1">
+						<select name="chr_denomination_type5" class="input-medium">
+							<option value="">Type</option>
+							<option value="A">Amount</option>
+							<option value="P">Percentage</option>
+						</select>
+					  <input class="input-medium" id="focusedInput" type="text" name="str_denomination5" value="" placeholder="Event Denomination 1">
 					</div>
 				</div>
 			 
@@ -115,7 +140,11 @@
 		</p>
 
 	</footer>
-	
+	<?php if(isset($_GET["dump"])){
+
+		var_dump($this->session);
+	}
+	?>
 	<!-- start: JavaScript-->
 
 	<script src="<?php echo $path;?>/js/jquery-1.9.1.min.js"></script>

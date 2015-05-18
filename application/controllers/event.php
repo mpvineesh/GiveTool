@@ -33,7 +33,19 @@ class Event extends MY_Controller {
 		$data['organizations'] = '';		
 		$data['events'] = $events ;		
 		$this->load->view('header');
-		$this->load->view('event-list',$data);
+		$this->load->view('events-active',$data);
+		$this->load->view('footer');	         
+	}
+	
+	public function eventhistory() {	
+		$this->checklogin();		
+		$this->load->model('mEvent');	
+		$events = $this->mEvent->getoldevents(); 	
+		$data = array();
+		$data['organizations'] = '';		
+		$data['events'] = $events ;		
+		$this->load->view('header');
+		$this->load->view('event-history',$data);
 		$this->load->view('footer');	         
 	}
 	public function add() {	
@@ -166,7 +178,173 @@ class Event extends MY_Controller {
 			echo json_encode(array('success'=>'true', 'status'=>$status)); exit;
 		}		
 	}
-
+	public function savedenomination()
+	{
+		$this->load->model('mEvent');
+		if($this->input->post()){
+			$int_event_id = $this->input->post('int_event_id');
+			$str_denomination1 = $this->input->post('str_denomination1');
+			$chr_denomination_type1 = $this->input->post('chr_denomination_type1'); 
+			$str_denomination2 = $this->input->post('str_denomination2');
+			$chr_denomination_type2 = $this->input->post('chr_denomination_type2'); 
+			$str_denomination3 = $this->input->post('str_denomination3');
+			$chr_denomination_type3 = $this->input->post('chr_denomination_type3'); 
+			$str_denomination4 = $this->input->post('str_denomination4');
+			$chr_denomination_type4 = $this->input->post('chr_denomination_type4'); 
+			$str_denomination5 = $this->input->post('str_denomination5');
+			$chr_denomination_type5 = $this->input->post('chr_denomination_type5'); 
+			
+			$denominationdata = array();
+			$denominationdata['tbl_event_denomination.int_event_id'] = $int_event_id;
+			$denominationdata['tbl_event_denomination.str_denomination1'] = $str_denomination1;
+			$denominationdata['tbl_event_denomination.str_denomination2'] = $str_denomination2;
+			$denominationdata['tbl_event_denomination.str_denomination3'] = $str_denomination3;
+			$denominationdata['tbl_event_denomination.str_denomination4'] = $str_denomination4;
+			$denominationdata['tbl_event_denomination.str_denomination5'] = $str_denomination5;
+			$denominationdata['tbl_event_denomination.chr_denomination_type1'] = $chr_denomination_type1;
+			$denominationdata['tbl_event_denomination.chr_denomination_type2'] = $chr_denomination_type2;
+			$denominationdata['tbl_event_denomination.chr_denomination_type3'] = $chr_denomination_type3;
+			$denominationdata['tbl_event_denomination.chr_denomination_type4'] = $chr_denomination_type4;
+			$denominationdata['tbl_event_denomination.chr_denomination_type5'] = $chr_denomination_type5;
+			$denominationdata['tbl_event_denomination.int_event_id'] = $int_event_id;
+			$int_event_denomination_id = $this->mEvent->savedenomination($denominationdata);
+			echo json_encode(array('success'=>'true')); exit;
+		}		
+	}
+	
+	public function getdenomination()
+	{
+		$this->load->model('mEvent');
+		
+		if($this->input->post()){
+			$int_event_id = $this->input->post('int_event_id');
+		
+			$denominations = $this->mEvent->getdenomination($int_event_id); 
+			if(count($denominations)>0){
+				echo '
+				<input type="hidden" name="int_event_id" id="int_event_id_hidden" value="'.$int_event_id.'">
+				<fieldset>
+					<div class="control-group">
+						<label class="control-label" for="focusedInput">Denomination 1</label>
+						<div class="controls">
+							<select name="chr_denomination_type1" class="input-medium">
+								<option value="">Type</option>
+								<option value="A">Amount</option>
+								<option value="P">Percentage</option>
+							</select>
+							<input class="input-medium" id="focusedInput" type="text" name="str_denomination1" value="'.$denominations[0]->str_denomination1.'" placeholder="Event Denomination 1" >
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="focusedInput">Denomination 2</label>
+						<div class="controls">
+							<select name="chr_denomination_type2" class="input-medium">
+								<option value="">Type</option>
+								<option value="A">Amount</option>
+								<option value="P">Percentage</option>
+							</select>
+						  <input class="input-medium" id="focusedInput" type="text" name="str_denomination2" value="'.$denominations[0]->str_denomination2.'" placeholder="Event Denomination 1">
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="focusedInput">Denomination 3</label>
+						<div class="controls">
+							<select name="chr_denomination_type3" class="input-medium">
+								<option value="">Type</option>
+								<option value="A">Amount</option>
+								<option value="P">Percentage</option>
+							</select>
+						  <input class="input-medium" id="focusedInput" type="text" name="str_denomination3" value="'.$denominations[0]->str_denomination3.'" placeholder="Event Denomination 1">
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="focusedInput">Denomination 4</label>
+						<div class="controls">
+							<select name="chr_denomination_type4" class="input-medium">
+								<option value="">Type</option>
+								<option value="A">Amount</option>
+								<option value="P">Percentage</option>
+							</select>
+						  <input class="input-medium" id="focusedInput" type="text" name="str_denomination4" value="'.$denominations[0]->str_denomination4.'" placeholder="Event Denomination 1">
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="focusedInput">Denomination 5</label>
+						<div class="controls">
+							<select name="chr_denomination_type5" class="input-medium">
+								<option value="">Type</option>
+								<option value="A">Amount</option>
+								<option value="P">Percentage</option>
+							</select>
+						  <input class="input-medium" id="focusedInput" type="text" name="str_denomination5" value="'.$denominations[0]->str_denomination5.'" placeholder="Event Denomination 1">
+						</div>
+					</div>
+				</fieldset>';
+			}else{
+				echo '
+				<input type="hidden" name="int_event_id" id="int_event_id_hidden" value="'.$int_event_id.'">
+				<fieldset>
+					<div class="control-group">
+						<label class="control-label" for="focusedInput">Denomination 1</label>
+						<div class="controls">
+							<select name="chr_denomination_type1" class="input-medium">
+								<option value="">Type</option>
+								<option value="A">Amount</option>
+								<option value="P">Percentage</option>
+							</select>
+							<input class="input-medium" id="focusedInput" type="text" name="str_denomination1" value="" placeholder="Event Denomination 1" >
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="focusedInput">Denomination 2</label>
+						<div class="controls">
+							<select name="chr_denomination_type2" class="input-medium">
+								<option value="">Type</option>
+								<option value="A">Amount</option>
+								<option value="P">Percentage</option>
+							</select>
+						  <input class="input-medium" id="focusedInput" type="text" name="str_denomination2" value="" placeholder="Event Denomination 1">
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="focusedInput">Denomination 3</label>
+						<div class="controls">
+							<select name="chr_denomination_type3" class="input-medium">
+								<option value="">Type</option>
+								<option value="A">Amount</option>
+								<option value="P">Percentage</option>
+							</select>
+						  <input class="input-medium" id="focusedInput" type="text" name="str_denomination3" value="" placeholder="Event Denomination 1">
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="focusedInput">Denomination 4</label>
+						<div class="controls">
+							<select name="chr_denomination_type4" class="input-medium">
+								<option value="">Type</option>
+								<option value="A">Amount</option>
+								<option value="P">Percentage</option>
+							</select>
+						  <input class="input-medium" id="focusedInput" type="text" name="str_denomination4" value="" placeholder="Event Denomination 1">
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="focusedInput">Denomination 5</label>
+						<div class="controls">
+							<select name="chr_denomination_type5" class="input-medium">
+								<option value="">Type</option>
+								<option value="A">Amount</option>
+								<option value="P">Percentage</option>
+							</select>
+						  <input class="input-medium" id="focusedInput" type="text" name="str_denomination5" value="" placeholder="Event Denomination 1">
+						</div>
+					</div>
+				</fieldset>';
+			}exit;
+		}
+		
+	}
+	
 	public function editorganization($int_org_id) {
 	
 		$this->checklogin();

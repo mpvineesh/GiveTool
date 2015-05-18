@@ -109,6 +109,15 @@ class Muser extends CI_Model {
 		$row = $query->row();
 		return $row;		 
 	}  
+	function getprofile($int_user_id)
+	{
+		$this->db->select('tbl_org_user.*, o.str_name AS str_org_name');
+		$this->db->where('tbl_org_user.int_user_id', $int_user_id);
+		$query = $this->db->join('tbl_organization AS o', 'o.int_organization_id = tbl_org_user.int_organization_id');  
+		$query = $this->db->get('tbl_org_user');	
+		$row = $query->row();
+		return $row;		 
+	}  
 	function deleteorguser($int_org_user_id){
 		$this->db->where('int_org_user_id', $int_org_user_id); 
 		$result = $this->db->delete('tbl_org_user');

@@ -24,6 +24,27 @@ class Mevent extends CI_Model {
 		}
 	}
 	
+	function savedenomination($data){
+		
+		// Run query to insert blank row
+		$this->db->insert('tbl_event_denomination', array('int_event_denomination_id' => NULL) );
+		// Get id of inserted record
+		$int_event_denomination_id = $this->db->insert_id();
+		// Now call the edit function to update the actual data for this new row now we have the ID
+		$this->editdenomination($int_event_denomination_id, $data);		
+		return $int_event_denomination_id;
+	}
+	function editdenomination($int_event_denomination_id, $data){
+		$this->db->where('int_event_denomination_id', $int_event_denomination_id); 
+		$result = $this->db->update('tbl_event_denomination', $data);
+		// Return bool on success		
+		if($result){
+			// Clear the cache file for this room info page
+			return true;
+		} else {
+			return false;
+		}
+	}
 	
 	function getevents()
 	{
@@ -32,6 +53,26 @@ class Mevent extends CI_Model {
 		return $query->result();
 	}
 	
+	function getoldevents()
+	{
+		$this->load->database();	
+		$query = 	"SELECT *
+					FROM tbl_event e WHERE 1=1 "; 
+		$query = $query." AND e.chr_status ='I'";		
+		$result =   $this->db->query($query);           
+		return $result->result();
+	
+		$this->load->database();
+		$query = $this->db->get('tbl_event');
+		return $query->result();
+	}
+	function getdenomination($int_event_id)
+	{
+		$this->load->database();
+		$this->db->where('int_event_id', $int_event_id); 
+		$query = $this->db->get('tbl_event_denomination');
+		return $query->result();
+	}
 	function getactiveevents()
 	{
 		$this->load->database();
