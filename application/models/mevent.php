@@ -121,6 +121,17 @@ class Mevent extends CI_Model {
 			return false;
 		}
 	}
+	function deleteevent($int_event_id){
+		$this->db->where('int_event_id', $int_event_id); 
+		$result = $this->db->delete('tbl_event');
+		// Return bool on success
+		if($result){
+			// Clear the cache file for this room info page
+			return true;
+		} else {
+			return false;
+		}
+	}
 	function deleteorg($int_organization_id){
 		$this->db->where('int_organization_id', $int_organization_id); 
 		$result = $this->db->delete('tbl_organization');

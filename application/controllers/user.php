@@ -258,6 +258,49 @@ class User extends MY_Controller {
 		}
 		header('Location:'.$url.'/user/manageusers'); 
 	}
+	
+	
+	public function donorsignup()
+	{
+		$CI =& get_instance(); 
+		$url = $CI->config->config['base_site_url'];
+		$this->load->model('mUser');		
+		/*--------------Begin Get Form Variables --------------*/
+		
+		$str_lname = $this->input->post('str_lname');
+		$str_fname = $this->input->post('str_fname'); 
+		
+		$str_name = $str_lname." ".$str_fname;
+		$str_email = $this->input->post('str_email');
+		$str_address = $this->input->post('str_address');
+		$str_city = $this->input->post('str_city');
+		$str_state = $this->input->post('str_state');
+		$str_zip = $this->input->post('str_zip');
+		$str_phone = $this->input->post('str_phone');
+		
+		
+		/* --------------End Get Form Variables --------------*/
+		/* ------------------Add User ------------------------*/
+		$userdata = array();
+		$userdata['tbl_user.str_login'] = $str_email;
+		$userdata['tbl_user.str_password'] = 'password';
+		$userdata['tbl_user.int_user_type_id'] = 3; // 2- Organization/University		
+		
+		/* ------------------Add Organization ------------------------*/
+		$donordata = array();
+		$donordata['tbl_donor.str_fname'] = $str_fname;
+		$donordata['tbl_donor.str_lname'] = $str_lname;
+		$donordata['tbl_donor.str_email'] = $str_email;
+		$donordata['tbl_donor.str_address'] = $str_address;
+		$donordata['tbl_donor.str_city'] = $str_city;
+		$donordata['tbl_donor.str_state'] = $str_state;
+		$donordata['tbl_donor.str_zip'] = $str_zip;
+	
+		$int_user_id = $this->mUser->add($userdata);
+		$int_donor_id = $this->mUser->adddonor($donordata);
+		
+		header('Location:'.$url.'/main/home?success'); 
+	}
 	public function orgadd()
 	{
 		$CI =& get_instance(); 
@@ -355,15 +398,14 @@ class User extends MY_Controller {
 		$orgdata['tbl_organization.date_added'] = date('Y-m-d');
 		$orgdata['tbl_organization.date_modified'] = date('Y-m-d');
 		$orgdata['tbl_organization.chr_status'] = 'A'; 
-		$int_organization_id = $this->mUser->editorganization($int_organization_id,$orgdata);
-		
 		/* ------------------ Upload Logo Image ------------------------*/
 		if(isset($_FILES['img_logo']) && $_FILES['img_logo']['name'] !='' && strlen($_FILES['img_logo']['name'])){ 
 			$imgarray['img_logo'] = $_FILES['img_logo'];
-			//$imgupload[0] = $this->imageupload($imgarray,'img_logo','logo',$int_user_id);
+			$imgupload[0] = $this->imageupload($imgarray,'img_logo','logo',$int_organization_id);
+			$str_logo_image =  $imgupload[0]['content'];
+			$orgdata['tbl_organization.str_logo'] = $str_logo_image;
 		}
 		
-		$orgdata['tbl_organization.str_logo'] = $_FILES['img_logo']['name'];
 		$int_organization_id = $this->mUser->editorganization($int_organization_id,$orgdata);
 		
 		header('Location:'.$url.'/user/manageorg'); 
@@ -390,7 +432,7 @@ class User extends MY_Controller {
 		$url = $CI->config->config['base_url'];
 		$this->load->model('mUser');
 		$user = $this->mUser->deleteorg($int_org_id);		
-		header('Location:'.$url.'index.php/user/manageorg'); 
+		header('Location:'.$url.'/index.php/user/manageorg'); 
 	}
 
 	public function update()

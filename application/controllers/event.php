@@ -90,12 +90,11 @@ class Event extends MY_Controller {
 		$eventdata['tbl_event.date_created'] = date('Y-m-d');
 		$eventdata['tbl_event.chr_status'] = 'A';
 		$eventdata['tbl_event.int_event_user_id'] = $int_event_user_id;
-		$int_event_id = $this->mEvent->add($eventdata);
-		var_dump($_FILES['img_logo']);exit;
+		$int_event_id = $this->mEvent->add($eventdata); 
 		/* ------------------ Upload Logo Image ------------------------*/
 		if(isset($_FILES['img_logo']) && $_FILES['img_logo']['name'] !='' && strlen($_FILES['img_logo']['name'])){ 
 			$imgarray['img_logo'] = $_FILES['img_logo'];
-			$imgupload[0] = $this->imageupload($imgarray,'img_logo','event',$int_event_id);var_dump($imgupload[0]);exit;
+			$imgupload[0] = $this->imageupload($imgarray,'img_logo','event',$int_event_id);
 			$str_logo_image =  $imgupload[0]['content'];
 			
 			$eventdata['tbl_event.str_logo'] = $str_logo_image;
@@ -147,6 +146,8 @@ class Event extends MY_Controller {
 			$eventdata['tbl_event.str_logo'] = $str_logo_image;
 			
 		} 
+		
+		
 		$int_event_id = $this->mEvent->edit($int_event_id,$eventdata);
 		header('Location:'.$url.'/event/manage'); 
 	}
@@ -506,7 +507,15 @@ class Event extends MY_Controller {
 	//	$this->load->view('edit_form',$data);
 		//$this->load->view('welcome_message');
 	}
-	
+	public function deleteevent($eventid)
+	{	
+		$this->checklogin();
+		$CI =& get_instance(); 
+		$url = $CI->config->config['base_url'];
+		$this->load->model('mEvent');
+		$user = $this->mEvent->deleteevent($eventid);		
+		header('Location:'.$url.'/index.php/event/manage'); 
+	}
 	public function orgadd()
 	{
 		$CI =& get_instance(); 
@@ -670,10 +679,10 @@ class Event extends MY_Controller {
 		
 		if (!file_exists($path)) {
 			mkdir($path, 0777, true); 
-			mkdir($path."/logo", 0777, true);
+			mkdir($path."/logo", 0777, true); 
 			
 		}
-		$path = $path.$dir."/";
+		$path = $path."/logo/";
 		$result = array();
 		$result['error'] = 0;
 		$result['content'] = '';

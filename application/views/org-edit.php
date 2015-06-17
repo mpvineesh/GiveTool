@@ -30,7 +30,7 @@
 				</div>
 			</div>
 			<div class="box-content">
-				<form class="form-horizontal" method="post" action="<?php echo $base_site_url;?>/user/orgupdate">
+				<form class="form-horizontal" method="post" action="<?php echo $base_site_url;?>/user/orgupdate" id="orgadd" enctype="multipart/form-data">
 					<input type="hidden" name="int_org_id" value="<?php echo $org->int_organization_id;?>" >
 				  <fieldset>
 					 <div class="control-group">

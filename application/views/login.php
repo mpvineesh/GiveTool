@@ -11,15 +11,12 @@
 	<!-- start: Meta -->
 	<meta charset="utf-8">
 	<title>Admin</title>
-	<meta name="description" content="Bootstrap Metro Dashboard">
-	<meta name="author" content="Dennis Ji">
-	<meta name="keyword" content="Metro, Metro UI, Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
-	<!-- end: Meta -->
-	
+	<meta name="description" content="">
+	<meta name="keyword" content="">
+	<!-- end: Meta -->	
 	<!-- start: Mobile Specific -->
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<!-- end: Mobile Specific -->
-	
+	<!-- end: Mobile Specific -->	
 	<!-- start: CSS -->
 	<link id="bootstrap-style" href="<?php echo $path;?>/css/bootstrap.min.css" rel="stylesheet">
 	<link href="<?php echo $path;?>/css/bootstrap-responsive.min.css" rel="stylesheet">
@@ -76,7 +73,7 @@
 
 							<div class="button-login">	
 								<button type="submit" class="btn btn-primary">Login</button>
-							</div>
+							</div>                                                                  
 							<div class="clearfix"></div>
 					</form>
 					<hr>

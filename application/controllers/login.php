@@ -32,7 +32,7 @@ class Login extends MY_Controller {
 			$user_data = $this->session->all_userdata();  
 			header('Location:'.$url.'/dashboard');  
 		}else if($res == 0){
-			header('Location:'.$url.'?loginfailed'); 
+			header('Location:'.$url.'/main/home?loginfailed'); 
 		}else{  
 			$this->session->set_userdata('loggedin', '1');
 			$this->session->set_userdata('int_user_type_id', $user[0]->int_user_type_id);
@@ -42,9 +42,12 @@ class Login extends MY_Controller {
 			/*$this->session->set_userdata('loggedin', '1');
 			$this->session->set_userdata('user_type', 'admin');
 			$this->session->set_userdata('int_user_id', '1');*/
-			
-			$user_data = $this->session->all_userdata();  
-			header('Location:'.$url.'/dashboard');  
+			$int_user_type_id = $user[0]->int_user_type_id;
+			$user_data = $this->session->all_userdata();
+			if($int_user_type_id ==2)			
+				header('Location:'.$url.'/dashboard');  
+			else
+				header('Location:'.$url.'/main/home');  
 		} 
 	}
 	public function resetpassword()
@@ -80,7 +83,7 @@ class Login extends MY_Controller {
 		$this->session->sess_destroy();
 		$user_data = $this->session->all_userdata(); 
 		 
-		header('Location:'.$url); 
+		header('Location:'.$url.'/main/home'); 
 	}
 	
 	public function edit($userid)

@@ -48,6 +48,29 @@ class Muser extends CI_Model {
 	}
 	
 	
+	function adddonor($data){
+		
+		// Run query to insert blank row
+		$this->db->insert('tbl_donor', array('int_donor_id' => NULL) );
+		// Get id of inserted record
+		$int_donor_id = $this->db->insert_id();
+		// Now call the edit function to update the actual data for this new row now we have the ID
+		$this->editdonor($int_donor_id, $data);		
+		return $int_donor_id;
+	}
+	function editdonor($int_donor_id, $data){
+		$this->db->where('int_donor_id', $int_donor_id); 
+		$result = $this->db->update('tbl_donor', $data);
+		// Return bool on success		
+		if($result){
+			// Clear the cache file for this room info page
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	
 	function addorganization($data){
 		
 		// Run query to insert blank row
