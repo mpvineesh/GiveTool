@@ -45,7 +45,7 @@
 										$status = ($item->chr_status == 'A')?'Active':'Inactive';	//$image=$row['image_name'];
 										echo '<tr>
 												<td>'.$item->str_name.'</td>
-												<td class="center">'.$item->str_name.'</td>
+												<td class="center">'.$item->orgname.'</td>
 												<td class="center">'.$item->start_date.' to '.$item->end_date.'</td>
 												<td class="center">
 													<span class="btn btn-mini '.$className.'"  data="'.$item->int_event_id.'">'.$status.'</span>

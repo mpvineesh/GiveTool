@@ -6,6 +6,7 @@
 	$base_site_url = $CI->config->config['base_site_url'];
 	$name = $this->session->userdata("name");
 	$int_user_type = $this->session->userdata("int_user_type_id"); 
+	$bit_is_admin = $this->session->userdata("bit_is_admin"); 
 	
 ?>
 <!DOCTYPE html>
@@ -15,9 +16,6 @@
 	<!-- start: Meta -->
 	<meta charset="utf-8">
 	<title>Admin</title>
-	<meta name="description" content="Bootstrap Metro Dashboard">
-	<meta name="author" content="Dennis Ji">
-	<meta name="keyword" content="Metro, Metro UI, Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
 	<!-- end: Meta -->
 	
 	<!-- start: Mobile Specific -->
@@ -56,6 +54,7 @@
 
 <body>
 	<input type="hidden" id="base-url" value="<?php echo $base_site_url;?>">
+	<input id="validate" type="hidden" name="validate" value="0">
 		<!-- start: Header -->
 	<div class="navbar">
 		<div class="navbar-inner">
@@ -65,7 +64,7 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</a>
-				<a class="brand" href="index.html"><span>Give Tool Admin</span></a>
+				<a class="brand" href="<?php echo $base_site_url;?>/dashboard"><span>Dashboard</span></a>
 								
 				<!-- start: Header Menu -->
 				<div class="nav-no-collapse header-nav">
@@ -327,7 +326,9 @@
  									<span>Account Settings</span>
 								</li>
 								<li><a href="#" class="btn-admin-setting"><i class="halflings-icon lock "></i> Change Password</a></li>
-								<li><a href="<?php echo $base_site_url;?>/user/profile/<?php echo $this->session->userdata('int_user_id'); ?>" class="btn-admin-setting"><i class="halflings-icon user "></i> Profile</a></li>
+								<?php if($int_user_type != 1){ ?>
+								<li><a href="<?php echo $base_site_url;?>/user/profile/<?php echo $this->session->userdata('int_user_id'); ?>"><i class="halflings-icon user "></i> Profile</a></li>
+								<?php } ?>
 								<li><a href="<?php echo $base_site_url;?>/user/logout"><i class="halflings-icon off"></i> Logout</a></li>
 							</ul>
 						</li>
@@ -348,8 +349,9 @@
 			<div id="sidebar-left" class="span2">
 				<div class="nav-collapse sidebar-nav">
 					<ul class="nav nav-tabs nav-stacked main-menu">
-						<li><a href="<?php echo $base_site_url;?>"><i class="icon-bar-chart"></i><span class="hidden-tablet"> Dashboard</span></a></li>	
-						
+						<?php if($int_user_type == 1){ ?>
+						<li><a href="<?php echo $base_site_url;?>/dashboard"><i class="icon-bar-chart"></i><span class="hidden-tablet"> Dashboard</span></a></li>	
+						<?php }?>
 						<!--<li>
 							<a class="dropmenu" href="#" id="org"><i class="icon-folder-close-alt"></i><span class="hidden-tablet"> Organization Mgmnt (<span class="sign_org">+</span>)</span></a>
 							<ul>
@@ -358,10 +360,12 @@
 							</ul>	
 						</li>	-->					
 						<!--<li><a href="<?php echo $base_site_url;?>/user/organization"><i class="icon-tasks"></i><span class="hidden-tablet"> Organizations</span></a></li>	-->		
-						<?php if($int_user_type == 1){ ;?>
+						<?php if($int_user_type == 1){ ?>
 						<li><a href="<?php echo $base_site_url;?>/user/manageorg"><i class="icon-tasks"></i><span class="hidden-tablet"> Organization Mgmnt</span></a></li>	
-						<?php };?>
+						<?php }?>
+						<?php if($bit_is_admin == 1){ ?>
 						<li><a href="<?php echo $base_site_url;?>/user/manageusers"><i class="icon-tasks"></i><span class="hidden-tablet"> User Mgmnt</span></a></li>	
+						<?php }?>
 						<li>
 							<a class="dropmenu" href="#" id="org"><i class="icon-folder-close-alt"></i><span class="hidden-tablet"> Event Mgmnt(<span class="sign_org">+</span>)</span></a>
 							<ul>

@@ -11,7 +11,10 @@ class Donor extends MY_Controller {
 		$this->checklogin();
 		
 		$this->load->model('mDonor');
+		$int_user_id = $this->session->userdata("int_user_id"); 
+		$donors = $this->mDonor->getdonors($int_user_id );
 		$data = array();
+		$data['donors'] = $donors;
 		
 		$this->load->view('header');
 		$this->load->view('donor-list',$data);
@@ -50,7 +53,49 @@ class Donor extends MY_Controller {
 		$this->load->view('footer');
 	         
 	}
-	
+	public function updateprofile() {
+		$this->load->model('mUser')	;
+		$this->checklogin();
+		$CI =& get_instance(); 
+		$url = $CI->config->config['base_url'];
+		$this->load->model('mDonor');
+		
+		 
+		$str_fname = $this->input->post('str_fname');
+		$str_lname = $this->input->post('str_lname');
+		$str_email = $this->input->post('str_email');
+		$str_password = $this->input->post('str_password');
+		$str_phone = $this->input->post('str_phone');
+		$str_address = $this->input->post('str_address');
+		$str_city = $this->input->post('str_city');
+		$str_zip = $this->input->post('str_zip');
+		$str_state = $this->input->post('str_state');
+		$int_donor_id = $this->input->post('int_donor_id');
+		$int_user_id = $this->input->post('int_user_id');
+		
+		
+		$donordata = array();
+		$donordata['tbl_donor.str_fname'] = $str_fname;
+		$donordata['tbl_donor.str_lname'] = $str_lname;
+		$donordata['tbl_donor.str_email'] = $str_email;
+		$donordata['tbl_donor.str_phone'] = $str_phone;
+		$donordata['tbl_donor.str_address'] = $str_address;
+		$donordata['tbl_donor.str_city'] = $str_city;
+		$donordata['tbl_donor.str_state'] = $str_state;
+		$donordata['tbl_donor.str_zip'] = $str_zip;	
+		$donordata['tbl_donor.int_donor_id'] = $int_donor_id;	
+		$donordata['tbl_donor.date_modified'] =  date('Y-m-d');	 
+		$int_donor_id = $this->mDonor->edit($int_donor_id,$donordata);
+		
+		
+		
+		$userdata = array();
+		$userdata['tbl_user.str_password'] = $str_password;
+		$userdata['tbl_user.int_user_id'] = $int_user_id;
+		$int_user_id = $this->mUser->edit($int_user_id,$userdata);
+		
+		header('Location:'.$url.'/index.php'); 
+	}
 	public function changestatus()
 	{
 		if($this->input->post()){
@@ -77,72 +122,110 @@ class Donor extends MY_Controller {
 	         
 	}
 
-	public function vieworganization($int_org_id) {
-	
-		$this->checklogin();
-		$this->load->model('mUser');
-		$org = $this->mUser->getorganization($int_org_id); 
-		$data = array();
-		$data['org'] = $org;
-		$this->load->view('header');
-		$this->load->view('org-view',$data);
-		$this->load->view('footer');
-	         
+
+	public function myprofile($int_donor_id) {	
+		$this->load->model('mMain');
+		$donor = $this->mMain->getdonordatabydonorid($int_donor_id);
+		$CI =& get_instance(); 
+		$url = $CI->config->config['base_url'];	
+		$base_site_url = $CI->config->config['base_site_url'];	 
+		foreach ($donor as $item){
+			echo '<div class="modal-header">
+					  <button type="button" class="close" data-dismiss="modal">&times;</button>
+					  <h4 class="modal-title">My Profile</h4>
+					</div>
+					<form class="form-horizontal" action="'.$base_site_url.'/donor/updateprofile" method="post" id="signup"  role="form">				
+						<div class="modal-body">
+					 		<input type="hidden"  name="int_donor_id"  value="'.$item->int_donor_id.'" >
+					 		<input type="hidden"  name="int_user_id"  value="'.$item->int_user_id.'" >
+							<div class="control-group">
+								<label class="control-label" for="name">First Name</label>
+								<div class="controls">
+								  <input class="form-control" id="fname" type="text" title="First Name" name="str_fname" validate="text" value="'.$item->str_fname.'" placeholder="First Name">
+								  <span class="help-inline" id="fname_msg"></span>
+								</div>
+								
+							</div>
+							<div class="control-group">
+								<label class="control-label" for="lname">Last Name</label>
+								<div class="controls">
+								  <input class="form-control" id="lname" type="text" title="Last Name" name="str_lname" validate="text" value="'.$item->str_lname.'" placeholder="Last Name">
+								  <span class="help-inline" id="lname_msg"></span>
+								</div>
+							</div>					
+							<div class="control-group">
+								<label class="control-label" for="email">Email</label>
+								<div class="controls">
+									<input class="input-xlarge uneditable-input" id="email" type="hidden" name="str_email" title="Email" value="'.$item->str_email.'" placeholder="Email">
+									<span class="input-xlarge uneditable-input">'.$item->str_email.'</span>
+									<span class="help-inline" id="email_msg"></span>
+								</div>
+							</div>					
+							<div class="control-group">
+								<label class="control-label" for="password">Password</label>
+								<div class="controls">
+									<input class="form-control" id="password" type="password" name="str_password"  title="Password" validate="text"  value="'.$item->str_password.'" placeholder="Password">
+									<span class="help-inline" id="password_msg"></span>
+								</div>
+							</div>					
+							<div class="control-group">
+								<label class="control-label" for="address">Street Address</label>
+								<div class="controls">
+								  <input class="form-control" id="address" type="text" name="str_address"  title="Address" validate="text"  value="'.$item->str_address.'" placeholder="Street Address">
+								   <span class="help-inline" id="address_msg"></span>
+								</div>
+							</div>					
+							<div class="control-group">
+								<label class="control-label" for="city">City</label>
+								<div class="controls">
+								  <input class="form-control" id="city" type="text" name="str_city"  title="City" validate="text"  value="'.$item->str_city.'" placeholder="City">
+								   <span class="help-inline" id="city_msg"></span>
+								</div>
+							</div>					
+							<div class="control-group">
+								<label class="control-label" for="state">State</label>
+								<div class="controls">
+								  <input class="form-control" id="state" type="text" name="str_state"  title="State" validate="text"  value="'.$item->str_state.'" placeholder="State">
+								   <span class="help-inline" id="state_msg"></span>
+								</div>
+							</div>					
+							<div class="control-group">
+								<label class="control-label" for="zip">Zip</label>
+								<div class="controls">
+								  <input class="form-control" id="zip" type="text" name="str_zip"  title="Zip" validate="numeric"  value="'.$item->str_zip.'" placeholder="Zip">
+								   <span class="help-inline" id="zip_msg"></span>
+								</div>
+							</div>				
+							<div class="control-group">
+								<label class="control-label" for="phone">Phone</label>
+								<div class="controls">
+								  <input class="form-control" id="phone" type="text" name="str_phone"  title="Phone" validate="phone"  value="'.$item->str_phone.'" placeholder="Phone">
+								   <span class="help-inline" id="phone_msg"></span>
+								</div>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-warning" data-dismiss="modal">Close</button>
+							<button class="btn btn-success" type="submit" id="btn-signup1" value="1" name="event_search" onClick="return validateForm(\'signup\');">Save Changes</button>
+
+						</div>
+					</form>	
+				';
+			} 
 	}
 
-	public function adduser() {
+	public function view($int_donor_id) {
 	
 		//$this->checklogin();
 		
-		$this->load->model('mUser');
-		$orgs = $this->mUser->getorganizations();
-		$orguser = $this->mUser->getorganizationuser(1);
+		$this->load->model('mDonor');
+		$donor = $this->mDonor->getdonordetails($int_donor_id);
 		$data = array();
-		$data['orgs'] = $orgs;
-		$data['orguser'] = $orguser;
-		$data['int_org_user_id'] = 0;
-		$data['title'] = 'Add Organization User';
+		$data['donor'] = $donor;
+		$data['title'] = 'View Donor Details';
 		
 		$this->load->view('header');
-		$this->load->view('user-add',$data);
-		$this->load->view('footer');
-	         
-	}
-	
-	public function edituser($int_org_user_id) {
-	
-		//$this->checklogin();
-		
-		$this->load->model('mUser');
-		$orgs = $this->mUser->getorganizations();
-		$orguser = $this->mUser->getorganizationuser($int_org_user_id);
-		$data = array();
-		$data['orgs'] = $orgs;
-		$data['orguser'] = $orguser;
-		$data['int_org_user_id'] = $int_org_user_id;
-		$data['title'] = 'Edit Organization User';
-		
-		$this->load->view('header');
-		$this->load->view('user-edit',$data);
-		$this->load->view('footer');
-	         
-	}
-
-	public function viewuser($int_org_user_id) {
-	
-		//$this->checklogin();
-		
-		$this->load->model('mUser');
-		$orgs = $this->mUser->getorganizations();
-		$orguser = $this->mUser->getorganizationuserdetail($int_org_user_id);
-		$data = array();
-		$data['orgs'] = $orgs;
-		$data['orguser'] = $orguser;
-		$data['int_org_user_id'] = $int_org_user_id;
-		$data['title'] = 'View Organization User';
-		
-		$this->load->view('header');
-		$this->load->view('user-view',$data);
+		$this->load->view('donor-view',$data);
 		$this->load->view('footer');
 	         
 	}
@@ -162,270 +245,20 @@ class Donor extends MY_Controller {
 	         
 	}
 	
-	public function resetpassword()
+	
+	
+	public function delete($int_donor_id)
 	{	
-		$this->load->library('session');
+		$this->checklogin();
 		$CI =& get_instance(); 
-		$base_url = $CI->config->config['base_url'];
-		$url = $CI->config->config['base_site_url'];
-		$this->load->model('user_model'); 
-		$email = $_POST['email'];
-		$user  = $this->user_model->getuserbyemail($email); 
-		$res = 1; 
-		if(count($user) ==0 )
-			$res = 0;
-		if($res == 0){
-			header('Location:'.$url.'?mailsent&resetfailed'); 
-		}else{   
-			$password = $user[0]->str_password;
-			$to=$email;
-			$subject="Lost Password";
-			$message=$password;
-			$from = "info@smartipage.com";
-			$headers = "From:" . $from;
-			mail($to,$subject,$message,$headers);
-			header('Location:'.$url.'?mailsent');
-		} 
-	}
-	public function logout()
-	{	
-		$this->load->library('session');
-		$CI =& get_instance(); 
-		$url = $CI->config->config['base_site_url']; 
-		$this->session->sess_destroy();
-		$user_data = $this->session->all_userdata(); 
-		 
-		header('Location:'.$url); 
+		$url = $CI->config->config['base_url'];
+		$this->load->model('mDonor');
+		$user = $this->mDonor->deletedonor($int_donor_id);
+		
+		
+		header('Location:'.$url.'/index.php/donor/manage'); 
 	}
 	
-	public function edit($userid)
-	{	
-		$this->checklogin();
-		$this->load->model('demo_model');
-		$user = $this->demo_model->getuser($userid);
-		
-		$data = array();
-		$data['user'] = $user;
-		$data['id'] = 1;
-		$this->load->view('update',$data);
-		//$this->load->view('welcome_message');
-	}
-	public function delete($userid)
-	{	
-		$this->checklogin();
-		$CI =& get_instance(); 
-		$url = $CI->config->config['base_url'];
-		$this->load->model('demo_model');
-		$user = $this->demo_model->delete($userid);
-		
-		$data = array();
-		$data['user'] = $user;
-		$data['id'] = 1;
-		header('Location:'.$url.'index.php/demo/listusers'); 
-	//	$this->load->view('edit_form',$data);
-		//$this->load->view('welcome_message');
-	}
-	public function saveorguser()
-	{
-		$CI =& get_instance(); 
-		$url = $CI->config->config['base_site_url'];
-		$this->load->model('mUser');
-		
-		
-		
-		/*--------------Begin Get Form Variables --------------*/
-		
-		$str_name = $this->input->post('str_name');
-		$str_email = $this->input->post('str_email');
-		$str_password = $this->input->post('str_password');
-		$int_org_user_id = $this->input->post('int_org_user_id');
-		$int_organization_id = $this->input->post('int_organization_id');
-		if(isset($_POST["bit_is_admin"]))
-			$bit_is_admin = $this->input->post('bit_is_admin');
-		else
-			$bit_is_admin = 0;
-		
-		/* --------------End Get Form Variables --------------*/
-		/* ------------------Add User ------------------------*/
-		$userdata = array();
-		$userdata['tbl_user.str_login'] = $str_email;
-		$userdata['tbl_user.str_password'] = $str_password;
-		$userdata['tbl_user.int_user_type_id'] = 2; // 2- Organization/University
-		
-		$int_user_id = $this->mUser->add($userdata);
-		
-		/* ------------------Add Organization ------------------------*/
-		$orguserdata = array();
-		$orguserdata['tbl_org_user.str_name'] = $str_name;
-		$orguserdata['tbl_org_user.str_email'] = $str_email;
-		$orguserdata['tbl_org_user.str_password'] = $str_password;
-		$orguserdata['tbl_org_user.int_user_id'] = 0;
-		$orguserdata['tbl_org_user.int_organization_id'] = $int_organization_id; 
-		$orguserdata['tbl_org_user.bit_is_admin'] = $bit_is_admin;
-		if($int_org_user_id > 0){ 
-			$orguserdata['tbl_org_user.int_org_user_id'] = $int_org_user_id;
-			$int_org_user_id = $this->mUser->editorguser($int_org_user_id,$orguserdata);
-		}else{
-			$int_org_user_id = $this->mUser->addorguser($orguserdata);
-		}
-		header('Location:'.$url.'/user/manageusers'); 
-	}
-	public function orgadd()
-	{
-		$CI =& get_instance(); 
-		$url = $CI->config->config['base_site_url'];
-		$this->load->model('mUser');
-		
-		$imgupload=array();
-		$imgupload[0]=array();
-		$imgupload[0]['error'] = 0;
-		$imgupload[0]['content'] = '';
-		
-		/*--------------Begin Get Form Variables --------------*/
-		
-		$str_name = $this->input->post('str_name');
-		$str_short_name = $this->input->post('str_short_name');
-		$str_email = $this->input->post('str_email');
-		$str_address1 = $this->input->post('str_address1');
-		$str_address2 = $this->input->post('str_address2');
-		$str_city = $this->input->post('str_city');
-		$int_state_id = $this->input->post('int_state_id');
-		$int_country_id = $this->input->post('int_country_id');
-		$str_zip = $this->input->post('str_zip');	
-		
-		/* --------------End Get Form Variables --------------*/
-		/* ------------------Add User ------------------------*/
-		$userdata = array();
-		$userdata['tbl_user.str_login'] = $str_email;
-		$userdata['tbl_user.str_password'] = 'password';
-		$userdata['tbl_user.int_user_type_id'] = 2; // 2- Organization/University
-		$int_user_id = $this->mUser->add($userdata);
-		/* ------------------Add Organization ------------------------*/
-		$orgdata = array();
-		$orgdata['tbl_organization.int_user_id'] = $int_user_id;
-		$orgdata['tbl_organization.str_name'] =  $str_name;
-		$orgdata['tbl_organization.str_short_name'] = $str_name; 
-		$orgdata['tbl_organization.str_address1'] = $str_address1;
-		$orgdata['tbl_organization.str_address2'] = $str_address2;
-		$orgdata['tbl_organization.str_state'] = $int_state_id;
-		$orgdata['tbl_organization.str_city'] = $str_city;
-		$orgdata['tbl_organization.str_email'] = $str_email;
-		$orgdata['tbl_organization.date_added'] = date('Y-m-d');
-		$orgdata['tbl_organization.date_modified'] = date('Y-m-d');
-		$orgdata['tbl_organization.chr_status'] = 'A';
-		$orgdata['tbl_organization.int_user_id'] = $int_user_id;
-		$int_organization_id = $this->mUser->addorganization($orgdata);
-		
-		/* ------------------ Upload Logo Image ------------------------*/
-		if(isset($_FILES['img_logo']) && $_FILES['img_logo']['name'] !='' && strlen($_FILES['img_logo']['name'])){ 
-			$imgarray['img_logo'] = $_FILES['img_logo'];
-			$imgupload[0] = $this->imageupload($imgarray,'img_logo','logo',$int_organization_id);
-		} 
-		$str_logo_image =  $imgupload[0]['content'];
-		
-		$orgdata['tbl_organization.str_logo'] = $str_logo_image;
-		$int_organization_id = $this->mUser->editorganization($int_organization_id,$orgdata);
-		
-		header('Location:'.$url.'/user/organization'); 
-	}
-	
-	public function orgupdate()
-	{
-		$CI =& get_instance(); 
-		$url = $CI->config->config['base_site_url'];
-		$this->load->model('mUser');
-		
-		$imgupload=array();
-		$imgupload[0]=array();
-		$imgupload[0]['error'] = 0;
-		$imgupload[0]['content'] = '';
-		
-		/*--------------Begin Get Form Variables --------------*/
-		
-		$str_name = $this->input->post('str_name');
-		$str_short_name = $this->input->post('str_short_name');
-		$str_email = $this->input->post('str_email');
-		$str_address1 = $this->input->post('str_address1');
-		$str_address2 = $this->input->post('str_address2');
-		$str_city = $this->input->post('str_city');
-		$str_state = $this->input->post('str_state');
-		$int_country_id = $this->input->post('str_country');
-		$str_zip = $this->input->post('str_zip');	
-		$int_organization_id = $this->input->post('int_org_id');	
-		
-		/* --------------End Get Form Variables --------------*/
-		/* ------------------Add User ------------------------*/ 
-		/* ------------------Add Organization ------------------------*/
-		$orgdata = array(); 
-		$orgdata['tbl_organization.str_name'] =  $str_name;
-		$orgdata['tbl_organization.str_short_name'] = $str_short_name; 
-		$orgdata['tbl_organization.str_address1'] = $str_address1;
-		$orgdata['tbl_organization.str_address2'] = $str_address2;
-		$orgdata['tbl_organization.str_state'] = $str_state;
-		$orgdata['tbl_organization.str_city'] = $str_city;
-		$orgdata['tbl_organization.str_email'] = $str_email;
-		$orgdata['tbl_organization.date_added'] = date('Y-m-d');
-		$orgdata['tbl_organization.date_modified'] = date('Y-m-d');
-		$orgdata['tbl_organization.chr_status'] = 'A'; 
-		$int_organization_id = $this->mUser->editorganization($int_organization_id,$orgdata);
-		
-		/* ------------------ Upload Logo Image ------------------------*/
-		if(isset($_FILES['img_logo']) && $_FILES['img_logo']['name'] !='' && strlen($_FILES['img_logo']['name'])){ 
-			$imgarray['img_logo'] = $_FILES['img_logo'];
-			//$imgupload[0] = $this->imageupload($imgarray,'img_logo','logo',$int_user_id);
-		}
-		
-		$orgdata['tbl_organization.str_logo'] = $_FILES['img_logo']['name'];
-		$int_organization_id = $this->mUser->editorganization($int_organization_id,$orgdata);
-		
-		header('Location:'.$url.'/user/manageorg'); 
-	}
-
-	public function deleteorguser($int_org_user_id)
-	{	
-		$this->checklogin();
-		$CI =& get_instance(); 
-		$url = $CI->config->config['base_url'];
-		$this->load->model('mUser');
-		$user = $this->mUser->deleteorguser($int_org_user_id);
-		
-		header('Location:'.$url.'index.php/user/manageusers'); 
-	//	$this->load->view('edit_form',$data);
-		//$this->load->view('welcome_message');
-	}
-	public function deleteorg($int_org_id)
-	{	
-		$this->checklogin();
-		$CI =& get_instance(); 
-		$url = $CI->config->config['base_url'];
-		$this->load->model('mUser');
-		$user = $this->mUser->deleteorg($int_org_id);
-		
-		header('Location:'.$url.'index.php/user/manageorg'); 
-	}
-
-	public function update()
-	{
-		$CI =& get_instance(); 
-		$url = $CI->config->config['base_url'];
-		$this->load->model('demo_model');
-		$fname = $this->input->post('fname');
-		$lname = $this->input->post('lname');
-		$age = $this->input->post('age');
-		$address = $this->input->post('address');
-		$data = array();
-		$data['users.fname'] = $fname;
-		$data['users.lname'] = $lname;
-		$data['users.age'] = $age;
-		$data['users.address'] = $address;
-		$data['users.id'] = $this->input->post('id');
-		$userid = $this->demo_model->edit($data['users.id'],$data);
-		$users  = $this->demo_model->get();
-		$data = array();
-		$data['user'] = $users;
-		$data['userid'] = 1;
-		header('Location:'.$url.'index.php/demo/listusers'); 
-	}
 	public function imageupload($img,$fieldname,$dir,$id)
 	{
 		$session_id='1'; //$session id

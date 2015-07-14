@@ -16,7 +16,9 @@ class Event extends MY_Controller {
 	public function manage() {	
 		$this->checklogin();		
 		$this->load->model('mEvent');	
-		$events = $this->mEvent->getevents(); 	
+		
+		$int_user_id = $this->session->userdata("int_user_id"); 
+		$events = $this->mEvent->getevents($int_user_id); 	
 		$data = array();
 		$data['organizations'] = '';		                          
 		$data['events'] = $events ;		
@@ -28,7 +30,8 @@ class Event extends MY_Controller {
 	public function activeevents() {	
 		$this->checklogin();		
 		$this->load->model('mEvent');	
-		$events = $this->mEvent->getactiveevents(); 	
+		$int_user_id = $this->session->userdata("int_user_id"); 
+		$events = $this->mEvent->getactiveevents($int_user_id ); 	
 		$data = array();
 		$data['organizations'] = '';		
 		$data['events'] = $events ;		
@@ -40,7 +43,8 @@ class Event extends MY_Controller {
 	public function eventhistory() {	
 		$this->checklogin();		
 		$this->load->model('mEvent');	
-		$events = $this->mEvent->getoldevents(); 	
+		$int_user_id = $this->session->userdata("int_user_id"); 
+		$events = $this->mEvent->getoldevents($int_user_id); 	
 		$data = array();
 		$data['organizations'] = '';		
 		$data['events'] = $events ;		
@@ -49,10 +53,12 @@ class Event extends MY_Controller {
 		$this->load->view('footer');	         
 	}
 	public function add() {	
-		$this->checklogin();		
-		$this->load->model('mEvent');
+		$this->checklogin();	 			
+		$this->load->model('mUser');
+		$organizations = $this->mUser->getorganizations();
 		$data = array();
-		$data['organizations'] = '';		
+		$data['organizations'] = $organizations;
+		  		
 		$this->load->view('header');
 		$this->load->view('event-add',$data);
 		$this->load->view('footer');	         
@@ -73,9 +79,13 @@ class Event extends MY_Controller {
 		$start_time = date("G:i", strtotime($start_time));
 		$end_date = date("Y-m-d", strtotime($this->input->post('end_date')));
 		$end_time = $this->input->post('end_time');	
-		$end_time = date("G:i", strtotime($end_time));	
+		$end_time = date("G:i", strtotime($end_time));	 		
+		$str_city = $this->input->post('str_city');
+		$str_state = $this->input->post('str_state');
+		$str_country = $this->input->post('str_country');	
 		$img_logo = $this->input->post('img_logo');
 		$int_event_user_id = $this->input->post('int_event_user_id');
+		$int_organization_id = $this->input->post('int_organization_id');
 		//echo date('h:i A', strtotime($end_time));exit;
 		/* --------------End Get Form Variables --------------*/
 		/* ------------------Add Event ------------------------*/
@@ -87,9 +97,15 @@ class Event extends MY_Controller {
 		$eventdata['tbl_event.start_time'] = $start_time;
 		$eventdata['tbl_event.end_date'] = $end_date;
 		$eventdata['tbl_event.end_time'] = $end_time;
+		
+		$eventdata['tbl_event.str_city'] = $str_city;
+		$eventdata['tbl_event.str_state'] = $str_state;
+		$eventdata['tbl_event.str_country'] = $str_country;		
+		
 		$eventdata['tbl_event.date_created'] = date('Y-m-d');
 		$eventdata['tbl_event.chr_status'] = 'A';
 		$eventdata['tbl_event.int_event_user_id'] = $int_event_user_id;
+		$eventdata['tbl_event.int_organization_id'] = $int_organization_id;
 		$int_event_id = $this->mEvent->add($eventdata); 
 		/* ------------------ Upload Logo Image ------------------------*/
 		if(isset($_FILES['img_logo']) && $_FILES['img_logo']['name'] !='' && strlen($_FILES['img_logo']['name'])){ 
@@ -101,6 +117,38 @@ class Event extends MY_Controller {
 			$int_event_id = $this->mEvent->edit($int_event_id,$eventdata);
 		} 
 		
+		/* ------------------ Begin Insert Event Denominations ------------------------*/
+		$str_denomination1 = $this->input->post('flt_amount1');
+		$chr_denomination_type1 = 'A';
+		$str_denomination2 = $this->input->post('flt_amount2');
+		$chr_denomination_type2 = 'A';
+		$str_denomination3 = $this->input->post('flt_amount3');
+		$chr_denomination_type3 = 'A'; 
+		$str_denomination4 = $this->input->post('flt_amount4');
+		$chr_denomination_type4 = 'A'; 
+		$str_denomination5 = $this->input->post('flt_amount5');
+		$chr_denomination_type5 ='A';
+		
+		$denominationdata = array();
+		$denominationdata['tbl_event_denomination.int_event_id'] = $int_event_id;
+		$denominationdata['tbl_event_denomination.str_denomination1'] = $str_denomination1;
+		$denominationdata['tbl_event_denomination.str_denomination2'] = $str_denomination2;
+		$denominationdata['tbl_event_denomination.str_denomination3'] = $str_denomination3;
+		$denominationdata['tbl_event_denomination.str_denomination4'] = $str_denomination4;
+		$denominationdata['tbl_event_denomination.str_denomination5'] = $str_denomination5;
+		$denominationdata['tbl_event_denomination.chr_denomination_type1'] = $chr_denomination_type1;
+		$denominationdata['tbl_event_denomination.chr_denomination_type2'] = $chr_denomination_type2;
+		$denominationdata['tbl_event_denomination.chr_denomination_type3'] = $chr_denomination_type3;
+		$denominationdata['tbl_event_denomination.chr_denomination_type4'] = $chr_denomination_type4;
+		$denominationdata['tbl_event_denomination.chr_denomination_type5'] = $chr_denomination_type5;
+		$denominationdata['tbl_event_denomination.int_event_id'] = $int_event_id;
+		$int_event_denomination_id = $this->mEvent->savedenomination($denominationdata);
+		/* ------------------ End  Insert Event Denominatisavedenominationons  ------------------------*/
+		
+		
+		
+		
+		
 		header('Location:'.$url.'/event/manage'); 
 	}
 	
@@ -110,8 +158,7 @@ class Event extends MY_Controller {
 		$this->load->model('mEvent');
 		
 		/*--------------Begin Get Form Variables --------------*/
-		
-		$str_name = $this->input->post('str_name');
+		$str_name = $this->input->post('str_name'); 
 		$int_event_type_id = $this->input->post('int_event_type_id');
 		$str_description = $this->input->post('str_description');
 		$start_date = date("Y-m-d", strtotime($this->input->post('start_date')));
@@ -119,10 +166,14 @@ class Event extends MY_Controller {
 		$start_time = date("G:i", strtotime($start_time));
 		$end_date = date("Y-m-d", strtotime($this->input->post('end_date')));
 		$end_time = $this->input->post('end_time');	
-		$end_time = date("G:i", strtotime($end_time));	
+		$end_time = date("G:i", strtotime($end_time)); 		
+		$str_city = $this->input->post('str_city');
+		$str_state = $this->input->post('str_state');
+		$str_country = $this->input->post('str_country');		
 		$img_logo = $this->input->post('img_logo');
 		$int_event_user_id = $this->input->post('int_event_user_id');
 		$int_event_id = $this->input->post('int_event_id');
+		$int_organization_id = $this->input->post('int_organization_id');
 		//echo date('h:i A', strtotime($end_time));exit;
 		/* --------------End Get Form Variables --------------*/
 		/* ------------------Add Event ------------------------*/
@@ -134,10 +185,17 @@ class Event extends MY_Controller {
 		$eventdata['tbl_event.start_time'] = $start_time;
 		$eventdata['tbl_event.end_date'] = $end_date;
 		$eventdata['tbl_event.end_time'] = $end_time;
+		
+		$eventdata['tbl_event.str_city'] = $str_city;
+		$eventdata['tbl_event.str_state'] = $str_state;
+		$eventdata['tbl_event.str_country'] = $str_country;	
+		
 		$eventdata['tbl_event.date_created'] = date('Y-m-d');
 		$eventdata['tbl_event.chr_status'] = 'A';
 		$eventdata['tbl_event.int_event_user_id'] = $int_event_user_id;
-		
+		$eventdata['tbl_event.int_organization_id'] = $int_organization_id;
+		$eventdata['tbl_event.int_event_id'] = $int_event_id;
+		//var_dump($eventdata);exit;
 		/* ------------------ Upload Logo Image ------------------------*/
 		if(isset($_FILES['img_logo']) && $_FILES['img_logo']['name'] !='' && strlen($_FILES['img_logo']['name'])){ 
 			$imgarray['img_logo'] = $_FILES['img_logo'];
@@ -148,11 +206,61 @@ class Event extends MY_Controller {
 		} 
 		
 		
-		$int_event_id = $this->mEvent->edit($int_event_id,$eventdata);
+		 $this->mEvent->edit($int_event_id,$eventdata);
+		
+		/* ------------------ Begin Insert Event Denominations ------------------------*/ 
+		$str_denomination1 = $this->input->post('flt_amount1');
+		$chr_denomination_type1 = 'A';
+		$str_denomination2 = $this->input->post('flt_amount2');
+		$chr_denomination_type2 = 'A';
+		$str_denomination3 = $this->input->post('flt_amount3');
+		$chr_denomination_type3 = 'A'; 
+		$str_denomination4 = $this->input->post('flt_amount4');
+		$chr_denomination_type4 = 'A'; 
+		$str_denomination5 = $this->input->post('flt_amount5');
+		$chr_denomination_type5 ='A';
+		
+		$denominationdata = array();
+		$denominationdata['tbl_event_denomination.int_event_id'] = $int_event_id;
+		$denominationdata['tbl_event_denomination.str_denomination1'] = $str_denomination1;
+		$denominationdata['tbl_event_denomination.str_denomination2'] = $str_denomination2;
+		$denominationdata['tbl_event_denomination.str_denomination3'] = $str_denomination3;
+		$denominationdata['tbl_event_denomination.str_denomination4'] = $str_denomination4;
+		$denominationdata['tbl_event_denomination.str_denomination5'] = $str_denomination5;
+		$denominationdata['tbl_event_denomination.chr_denomination_type1'] = $chr_denomination_type1;
+		$denominationdata['tbl_event_denomination.chr_denomination_type2'] = $chr_denomination_type2;
+		$denominationdata['tbl_event_denomination.chr_denomination_type3'] = $chr_denomination_type3;
+		$denominationdata['tbl_event_denomination.chr_denomination_type4'] = $chr_denomination_type4;
+		$denominationdata['tbl_event_denomination.chr_denomination_type5'] = $chr_denomination_type5; 
+		
+		$int_event_denomination_id = $this->mEvent->editdenominationbyeventid($int_event_id,$denominationdata);
+		
+		
 		header('Location:'.$url.'/event/manage'); 
 	}
 		
 	public function eventedit($int_event_id) {
+				
+		$this->checklogin();		
+		$this->load->model('mEvent');
+		$event = $this->mEvent->geteventbyid($int_event_id);
+		 			
+		$this->load->model('mUser');
+		$organizations = $this->mUser->getorganizations(); 
+		$data = array();		
+		$data['event'] = $event;
+		$data['organizations'] = $organizations;		  		
+		$data['int_event_id'] = $int_event_id;		  		
+		$data['title'] = 'Edit Event';
+		$this->checklogin();
+		$this->load->view('header');
+		$this->load->view('event-edit',$data );
+		$this->load->view('footer');
+	         
+	}
+	
+		
+	public function viewevent($int_event_id) {
 				
 		$this->checklogin();		
 		$this->load->model('mEvent');
@@ -162,11 +270,10 @@ class Event extends MY_Controller {
 		$data['title'] = 'Edit Event';
 		$this->checklogin();
 		$this->load->view('header');
-		$this->load->view('event-edit',$data );
+		$this->load->view('event-view',$data );
 		$this->load->view('footer');
 	         
 	}
-	
 	public function changestatus()
 	{
 		if($this->input->post()){

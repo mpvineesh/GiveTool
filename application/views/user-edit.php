@@ -8,18 +8,11 @@
 <!-- start: Content -->
 <div id="content" class="span10">			
 			
-	<ul class="breadcrumb">
-		<li>
-			<i class="icon-home"></i>
-			<a href="index.html">Home</a>
-			<i class="icon-angle-right"></i> 
-		</li>
-		<li>
-			<i class="icon-edit"></i>
-			<a href="#">Add Organization User</a>
-		</li>
-	</ul>
 	
+	<?php
+			$pagename ='Edit Organization User';
+			include_once('breadcrums.php'); 
+		?>
 	<div class="row-fluid sortable">
 		<div class="box span12">
 			<div class="box-header" data-original-title>
@@ -33,6 +26,7 @@
 				<form class="form-horizontal" id="useradd" method="post" action="<?php echo $base_site_url;?>/user/saveorguser">
 				<input type="hidden" name="int_org_user_id" value="<?php echo $int_org_user_id;?>">
 				<input type="hidden" name="int_user_id" value="<?php echo $orguser->int_user_id;?>">
+					<input type="hidden" name="passwordstrength"  id="passwordstrength"  value="0">
 				  <fieldset>
 					 <div class="control-group">
 						<label class="control-label" for="selectError3">Organization</label>
@@ -87,7 +81,7 @@
 					 </div>
 					<div class="form-actions">
 					  <button type="submit" name="btn_add" class="btn btn-primary" onClick="return validateForm('useradd')";>Save</button>
-					  <button type="reset" class="btn goback">Cancel</button>
+					  <button type="reset" class="btn goback" data="user/manageusers">Cancel</button>
 					</div>
 				  </fieldset>
 				</form>   

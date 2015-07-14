@@ -10,14 +10,10 @@
 			<div id="content" class="span10">
 			
 			
-			<ul class="breadcrumb">
-				<li>
-					<i class="icon-home"></i>
-					<a href="index.html">Home</a> 
-					<i class="icon-angle-right"></i>
-				</li>
-				<li><a href="#">Organizations</a></li>
-			</ul>
+			<?php
+			$pagename ='Organizations';
+			include_once('breadcrums.php'); 
+		?>
 			<a href="<?php echo $base_site_url;?>/user/addorganization"><span class=""><button class="btn btn-small btn-success pull-right">Add New</button></span></li></br>                                 
 		<hr>
 			<div class="row-fluid sortable">		

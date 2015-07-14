@@ -31,15 +31,33 @@ class mLogin extends CI_Model {
 		$this->db->select('*'); // Select field
 		$this->db->from('tbl_user'); // from Table1
 		//$this->db->join('tbl_user_type','tbl_user.int_user_type_id = tbl_user_type.int_user_type_id','INNER'); // Join table1 with table2 based on the foreign key
-		$this->db->join('tbl_org_user','tbl_org_user.int_user_id = tbl_user.int_user_id','LEFT'); // Join table1 with table2 based on the foreign key
 		$this->db->where('tbl_user.str_login',$username); // Set Filter
 		$this->db->where('tbl_user.str_password',$password); // Set Filter
 		$res = $this->db->get();
-		return $res->result();
-		/*$query = $this->db->get('tbl_user');
-		$this->db->where('login', $username); 
-		$this->db->where('password', $password); 
-		return $query->result();*/
+		$result = $res->result();
+		if(sizeof($result) >0){
+			$int_user_type_id = $result[0]->int_user_type_id;
+			if($res->num_rows >0 && $result[0]->int_user_type_id ==3){
+				$int_user_id = $result[0]->int_user_id;
+				$query = 	"SELECT *,0 AS bit_is_admin FROM tbl_donor d INNER JOIN tbl_user u on u.int_user_id = d.int_user_id WHERE d.int_user_id = $int_user_id"; 
+				$result =   $this->db->query($query);           
+			}else if($res->num_rows >0 && $result[0]->int_user_type_id ==2){
+				$int_user_id = $result[0]->int_user_id;
+				$query = 	"SELECT * FROM tbl_org_user o INNER JOIN tbl_user u on u.int_user_id = o.int_user_id WHERE o.int_user_id = $int_user_id"; 
+				$result =   $this->db->query($query);           
+			}else if($res->num_rows >0 && $result[0]->int_user_type_id ==1){
+				$int_user_id = $result[0]->int_user_id;
+				$query = 	"SELECT *,'Administrator' AS str_name,1 AS bit_is_admin FROM tbl_user WHERE int_user_id = $int_user_id"; 
+				$result =   $this->db->query($query);   // var_dump($result->result());exit;        
+			}
+		 
+			if($int_user_type_id == 3 || $int_user_type_id==2 || $int_user_type_id ==1)
+				return $result->result();
+			else
+				return $result;
+		}else{
+			return $result;		
+		}
 	}
 	function getuserbyemail($email)
 	{

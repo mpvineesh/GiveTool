@@ -45,7 +45,7 @@
 										$status = ($item->chr_status == 'A')?'Active':'Inactive';	//$image=$row['image_name'];
 										echo '<tr>
 												<td>'.$item->str_name.'</td>
-												<td class="center">'.$item->str_name.'</td>
+												<td class="center">'.$item->orgname.'</td>
 												<td class="center">'.$item->start_date.' to '.$item->end_date.'</td>
 												<td class="center">
 													<a class="btn btn-mini changeStatus '.$className.'"  data="'.$item->int_event_id.'">'.$status.'</a>
@@ -54,9 +54,8 @@
 													<a href="'.$url.'/index.php/event/eventedit/'.$item->int_event_id.'"><button class="btn btn-mini btn-primary">Edit</button></a>
 													<a href="'.$url.'/index.php/event/viewevent/'.$item->int_event_id.'" class="btn btn-mini btn-success">View</a>
 													<a href="'.$url.'/index.php/event/deleteevent/'.$item->int_event_id.'" onclick="return confirmdelete();"><button class="btn btn-mini btn-danger">Delete</button></a>
-													<a href="##" class="btn btn-mini btn-warning btn-configure-event" data="'.$item->int_event_id.'">Configure</a>
-													<a href="##" class="btn btn-mini  btn-info btn-notify-donors" data="'.$item->int_event_id.'">Notify Donors</a>
-													
+													<a href="##" class="btn btn-mini  btn-info" id="showeventurl" data="'.$url.'/index.php/main/eventdetails/'.$item->int_event_id.'">Show Event URL</a>
+													<input type="button" class="md-trigger" data-toggle="modal" data-target="#eventurl" id="eventurlpopup" style="display:none;">
 												</td>
 											</tr>		';
 									}

@@ -17,15 +17,15 @@
 
 
 if($_SERVER['HTTP_HOST'] == "localhost:8081"){
-	$config['base_url']	= 'http://localhost:8081/QGGT/';
+	$config['base_url']	= 'http://localhost:8081/GiveTool/';
 }else{
-	$config['base_url']	= 'http://QGGT.com.md-in-9.webhostbox.net/QGGT/';
+	$config['base_url']	= 'http://testsite.sitespace.co.in//';
 }
 
 if($_SERVER['HTTP_HOST'] == "localhost:8081"){
-	$config['base_site_url']	= 'http://localhost:8081/QGGT/';
+	$config['base_site_url']	= 'http://localhost:8081/GiveTool/';
 }else{
-	$config['base_site_url']	= 'http://QGGT.com.md-in-9.webhostbox.net/QGGT/';
+	$config['base_site_url']	= 'http://testsite.sitespace.co.in//';
 }
 /*
 |--------------------------------------------------------------------------
@@ -137,7 +137,7 @@ $config['subclass_prefix'] = 'MY_';
 | DO NOT CHANGE THIS UNLESS YOU FULLY UNDERSTAND THE REPERCUSSIONS!!
 |
 */
-$config['permitted_uri_chars'] = 'a-z 0-9~%.:_\-';
+$config['permitted_uri_chars'] = 'a-z 0-9~%.:_\-@';
 
 
 /*

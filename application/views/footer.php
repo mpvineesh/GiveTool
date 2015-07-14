@@ -3,6 +3,7 @@
 	$url = $CI->config->config['base_url'];
 	$path = $CI->config->config['resource_path'];
 	$base_path = $CI->config->config['base_path'];
+	$int_user_id = $this->session->userdata("int_user_id");
 ?>
 </div><!--/#content.span10-->
 		</div><!--/fluid-row-->
@@ -81,17 +82,16 @@
 			<a href="#" class="btn btn-primary" id="saveDenominations">Save changes</a>
 		</div>
 	</div>		
-	<div class="modal hide fade" id="myModal">
+	<div class="modal hide fade" id="eventurl">
 		<div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal">×</button>
-			<h3>Settings</h3>
+			<button type="button" class="close" data-dismiss="modal">x</button>
+			<h3>Event URL</h3>
 		</div>
 		<div class="modal-body">
-			<p>Here settings can be configured...</p>
+			<p id="eventurltext"></p>
 		</div>
-		<div class="modal-footer">
-			<a href="#" class="btn" data-dismiss="modal">Close</a>
-			<a href="#" class="btn btn-primary">Save changes</a>
+		<div class="modal-footer"> 
+			<a href="#" class="btn" data-dismiss="modal">Close</a>			
 		</div>
 	</div>
 	<div class="modal hide fade" id="adminSettings">
@@ -102,32 +102,36 @@
 			<h3>Settings</h3>
 		</div>
 		<div class="modal-body">
+		<div class="alert alert-danger" role="alert" id="changepassword-error" style="display:none;"> 
+		 
+		</div>
 		<form class="form-horizontal" method="post" action="/user/orgadd">
-				  <fieldset>
-			<div class="control-group">
-				<label class="control-label" for="focusedInput">Current Password</label>
-				<div class="controls">
-				  <input class="input-xlarge" id="focusedInput" type="password" name="str_password" value="" placeholder="Current Password">
-				</div>
-			 </div>
-			 <div class="control-group">
-				<label class="control-label" for="focusedInput">New Password</label>
-				<div class="controls">
-				  <input class="input-xlarge" id="focusedInput" type="password" name="str_new_password" value="" placeholder="New Password">
-				</div>
-			 </div>
-			 <div class="control-group">
-				<label class="control-label" for="focusedInput">Retype Password</label>
-				<div class="controls">
-				  <input class="input-xlarge" id="focusedInput" type="password" name="str_new_password_1" value="" placeholder="Retypr Password">
-				</div>
-			 </div>
-			  </fieldset>
-				</form>   
+		<input type="hidden" name="int_user_id" id="int_user_id_hidden" value="<?php echo $int_user_id;?>">
+			<fieldset>
+				<div class="control-group">
+					<label class="control-label" for="currentpassword">Current Password</label>
+					<div class="controls">
+					  <input class="input-xlarge" id="currentpassword" type="password" name="str_password" value="" placeholder="Current Password">
+					</div>
+				 </div>
+				 <div class="control-group">
+					<label class="control-label" for="newpassword">New Password</label>
+					<div class="controls">
+					  <input class="input-xlarge" id="newpassword" type="password" name="str_new_password" value="" placeholder="New Password">
+					</div>
+				 </div>
+				 <div class="control-group">
+					<label class="control-label" for="retypepassword">Retype Password</label>
+					<div class="controls">
+					  <input class="input-xlarge" id="retypepassword" type="password" name="str_new_password_1" value="" placeholder="Retype Password">
+					</div>
+				 </div>
+		  </fieldset>
+			</form>   
 		</div>
 		<div class="modal-footer">
 			<a href="#" class="btn" data-dismiss="modal">Close</a>
-			<a href="#" class="btn btn-primary">Save changes</a>
+			<a href="#" class="btn btn-primary" id="changepassword">Save changes</a>
 		</div>
 	</div>
 	<div class="clearfix"></div>
@@ -135,7 +139,7 @@
 	<footer>
 
 		<p>
-			<span style="text-align:left;float:left">&copy; 2013 <a href="http://jiji262.github.io/Bootstrap_Metro_Dashboard/" alt="Bootstrap_Metro_Dashboard">Bootstrap Metro Dashboard</a></span>
+			<span style="text-align:left;float:left"></span>
 			
 		</p>
 
@@ -205,6 +209,7 @@
 
 	<script src="<?php echo $path;?>/js/retina.js"></script>
 	<script src="<?php echo $path;?>/js/validate.js"></script>
+	<script src="<?php echo $path;?>/js/ajax-functions.js"></script>
 
 	<script src="<?php echo $path;?>/js/custom.js"></script>
 	<script src="<?php echo $path;?>/js/bootstrap-timepicker.min.js"></script>
@@ -220,6 +225,16 @@
 					$('.sign_'+id).html('-');
 				}				
 			});
+			
+			
+			$("#showeventurl").bind("click", function(e){
+				var eventurl = $(this).attr( "data" );				
+				$("#eventurltext" ).html(eventurl); 
+				$("#eventurlpopup" ).trigger( "click" ); 
+				$("#copytext").attr( "data", eventurl);		
+			});
+			 
+			
 		});
 	</script>
 	<script type="text/javascript">

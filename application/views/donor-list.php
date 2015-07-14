@@ -9,14 +9,10 @@
 			<!-- start: Content -->
 <div id="content" class="span10">
 			
-			<ul class="breadcrumb">
-				<li>
-					<i class="icon-home"></i>
-					<a href="index.html">Home</a> 
-					<i class="icon-angle-right"></i>
-				</li>
-				<li><a href="#">Donor Details</a></li>
-			</ul>
+			<?php
+			$pagename ='Donor Details';
+			include_once('breadcrums.php'); 
+		?>
 			<hr>
 			<div class="row-fluid sortable">		
 				<div class="box span12">
@@ -46,23 +42,22 @@
 									$CI =& get_instance(); 
 									$url = $CI->config->config['base_url'];
 								
-									/*foreach ($users as $item)
+									foreach ($donors as $item)
 									{ 
 										//$image=$row['image_name'];
 										echo '<tr>
-												<td>'.$item->str_name.'</td>
-												<td class="center">'.$item->str_org_name.'</td>
-												<td class="center">'.$item->str_name.'</td>
+												<td>'.$item->str_fname.'</td>
+												<td class="center">'.$item->str_email.'</td>
+												<td class="center">'.$item->str_city.'</td>
+												<td class="center">'.$item->str_city.'</td>
+												<td class="center">'.$item->str_city.'</td>
+												<td class="center">'.$item->str_city.'</td>
 												<td class="center">
-													<span class="label label-success">Active</span>
-												</td>
-												<td class="center">
-													<a href="'.$url.'/index.php/user/edituser/'.$item->int_org_user_id.'"><button class="btn btn-mini btn-primary">Edit</button></a>
-													<a href="'.$url.'/index.php/user/viewuser/'.$item->int_org_user_id.'" class="btn btn-mini btn-success">View</a>
-													<a href="'.$url.'/index.php/user/deleteorguser/'.$item->int_org_user_id.'" onclick="return confirmdelete();"><button class="btn btn-mini btn-danger">Delete</button></a>
+													<a href="'.$url.'/index.php/donor/view/'.$item->int_donor_id.'" class="btn btn-mini btn-success">View</a>
+													<a href="'.$url.'/index.php/donor/delete/'.$item->int_donor_id.'" onclick="return confirmdelete();"><button class="btn btn-mini btn-danger">Delete</button></a>
 												</td>
 											</tr>		';
-									}*/
+									}
 									
 								?>			
 							</tbody>

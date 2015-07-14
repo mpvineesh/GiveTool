@@ -4,7 +4,7 @@
 	$path = $CI->config->config['resource_path'];
 	$base_path = $CI->config->config['base_path'];
 	$base_site_url = $CI->config->config['base_site_url'];
-	$pagename = 'Events';
+	$pagename = 'Active Events';
 ?>
 
 <!-- start: Content -->
@@ -45,7 +45,7 @@
 										$status = ($item->chr_status == 'A')?'Active':'Inactive';	//$image=$row['image_name'];
 										echo '<tr>
 												<td>'.$item->str_name.'</td>
-												<td class="center">'.$item->str_name.'</td>
+												<td class="center">'.$item->orgname.'</td>
 												<td class="center">'.$item->start_date.' to '.$item->end_date.'</td>
 												<td class="center">
 													<span class="btn btn-mini '.$className.'"  data="'.$item->int_event_id.'">'.$status.'</span>
@@ -53,8 +53,7 @@
 												<td class="center">
 													<a href="'.$url.'/index.php/event/viewevent/'.$item->int_event_id.'" class="btn btn-mini btn-success">View</a>
 													<a href="'.$url.'/index.php/event/deleteevent/'.$item->int_event_id.'" onclick="return confirmdelete();"><button class="btn btn-mini btn-danger">Delete</button></a>
-													
-												</td>
+												sss</td>
 											</tr>		';
 									}
 									

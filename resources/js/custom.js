@@ -2364,4 +2364,11 @@ $(document).ready(function(){
 		});
 		
 	});
+	
+	$(".goback").live('click', function(){
+		 window.history.back();
+		
+	});
+	
+	
 });

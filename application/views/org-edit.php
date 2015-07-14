@@ -8,17 +8,10 @@
 <!-- start: Content -->
 <div id="content" class="span10">			
 			
-	<ul class="breadcrumb">
-		<li>
-			<i class="icon-home"></i>
-			<a href="index.html">Home</a>
-			<i class="icon-angle-right"></i> 
-		</li>
-		<li>
-			<i class="icon-edit"></i>
-			<a href="#">Edit Organization</a>
-		</li>
-	</ul>
+	<?php
+			$pagename ='Edit Organization';
+			include_once('breadcrums.php'); 
+		?>
 	
 	<div class="row-fluid sortable">
 		<div class="box span12">
@@ -103,7 +96,7 @@
 					</div>    
 					<div class="form-actions">
 					  <button type="submit" name="btn_add" class="btn btn-primary">Save</button>
-					  <button type="reset" class="btn">Cancel</button>
+					  <button type="reset" class="btn goback"  data="user/manageorg">Cancel</button>
 					</div>
 				  </fieldset>
 				</form>   

@@ -14,6 +14,7 @@ class User extends MY_Controller {
 	         
 	}
 	
+	
 	public function organization() {
 	
 		$this->checklogin();
@@ -56,7 +57,7 @@ class User extends MY_Controller {
 		$this->load->view('org-add');
 		$this->load->view('footer');	         
 	}
-	
+	 
 	public function changestatus()
 	{
 		if($this->input->post()){
@@ -148,6 +149,41 @@ class User extends MY_Controller {
 		$this->load->view('footer');	         
 	}
 
+
+	public function changepassword($int_user_id,$newpassword,$currentpassword) {
+	
+		$this->checklogin();
+		$this->load->model('mUser');
+		$user = $this->mUser->getuserpassword($int_user_id);
+		
+		if($user->str_password != $currentpassword){
+			echo 'The current password you entered does not match with our records';
+		}else{
+			$userdata = array();
+			$userdata['tbl_user.int_user_id'] = $int_user_id;
+			$userdata['tbl_user.str_password'] = $newpassword;
+			$this->mUser->edit($int_user_id,$userdata);
+			echo 'The password updated successfully';
+		}
+		exit; 
+		         
+	}
+	public function savepassword($int_user_id) {
+	
+		$this->checklogin();
+		$this->load->model('mUser');		
+		$CI =& get_instance();  
+		$url = $CI->config->config['base_site_url'];
+		$userdata = array();
+		$str_password = $_POST['str_password'];
+		$userdata['tbl_user.int_user_id'] = $int_user_id;
+		$userdata['tbl_user.str_password'] = $str_password;
+		$userdata['tbl_user.str_password_reset_id'] = '';
+		$this->mUser->edit($int_user_id,$userdata);
+		
+		header('Location:'.$url.'?updated'); 
+		         
+	}
 	public function profile($int_user_id) {
 	
 		$this->checklogin();
@@ -165,8 +201,10 @@ class User extends MY_Controller {
 
 	public function manageusers() {
 		
-		$this->load->model('mUser');
-		$users = $this->mUser->getorgusers();
+		$int_user_id = $this->session->userdata("int_user_id"); 
+		$this->load->model('mUser'); 
+		
+		$users = $this->mUser->getorgusers($int_user_id);
 		$data = array();
 		$data['users'] = $users;
 		$data['title'] = 'Organization Users';		
@@ -280,11 +318,15 @@ class User extends MY_Controller {
 		
 		
 		/* --------------End Get Form Variables --------------*/
+		$length = 16;
+		$uniqueString = substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, $length);
+		
 		/* ------------------Add User ------------------------*/
 		$userdata = array();
 		$userdata['tbl_user.str_login'] = $str_email;
 		$userdata['tbl_user.str_password'] = 'password';
 		$userdata['tbl_user.int_user_type_id'] = 3; // 2- Organization/University		
+		$userdata['tbl_user.str_password_reset_id'] = $uniqueString; // 2- Organization/University		
 		
 		/* ------------------Add Organization ------------------------*/
 		$donordata = array();
@@ -292,12 +334,40 @@ class User extends MY_Controller {
 		$donordata['tbl_donor.str_lname'] = $str_lname;
 		$donordata['tbl_donor.str_email'] = $str_email;
 		$donordata['tbl_donor.str_address'] = $str_address;
-		$donordata['tbl_donor.str_city'] = $str_city;
+		$donordata['tbl_donor.str_city'] = 	$str_city;
 		$donordata['tbl_donor.str_state'] = $str_state;
-		$donordata['tbl_donor.str_zip'] = $str_zip;
+		$donordata['tbl_donor.str_zip'] = 	$str_zip;
 	
 		$int_user_id = $this->mUser->add($userdata);
+		$donordata['tbl_donor.int_user_id'] = $int_user_id;
 		$int_donor_id = $this->mUser->adddonor($donordata);
+		 
+		$to = $str_email;
+		$subject = 'Welcome to Quite Giants';
+		$toname = $str_fname;
+		$line1  = "We have created your <strong>Donor Profile</strong> to make donations for Events";
+		$line2  = "Now you can use your <strong>Give Tool Donor Profile</strong> to  donate money quickly and seamlessly mobility  for the events in our <strong>QuiteGiant Website </strong>";
+		$line3  = "<strong>Please note your GiveTool Login Details:</strong>";
+		$line4  = ' <table cellpadding="0" cellspacing="0" width="100%" border="0" style="border: 5px solid #eeeff1;">
+						<tr>
+							<td bgcolor="#f9f9fa" style="padding: 8px 0 8px 100px; border-bottom: 1px solid #dedede;"	width="50%">User Name/Email</td>
+							<td style="padding: 8px 0 8px 50px; border-bottom: 1px solid #dedede;">'.$str_email.'</td>
+						</tr>
+						<tr>
+							<td bgcolor="#f9f9fa" style="padding: 8px 0 8px 100px; border-bottom: 1px solid #dedede;">Creation Date</td>
+							<td style="padding: 8px 0 8px 50px; border-bottom: 1px solid #dedede;">'.date("D M j Y G:i:s").'</td>
+						</tr>
+						<tr>
+							<td bgcolor="#f9f9fa" style="padding: 8px 0 8px 100px; border-bottom: 1px solid #dedede;">Phone Number</td>
+							<td style="padding: 8px 0 8px 50px; border-bottom: 1px solid #dedede;">'.$str_phone.'</td>
+						</tr>
+						<tr>
+							<td bgcolor="#f9f9fa" style="padding: 8px 0 8px 100px; border-bottom: 1px solid #dedede;">Password</td>
+							<td style="padding: 8px 0 8px 50px; border-bottom: 1px solid #dedede;"><a href="'.$url.'/main/updatepassword/'.$int_user_id.'/'.$uniqueString.'">Update Password</a></td>
+						</tr>
+					</table>';
+		$this->sendHTMLEmail($toname,$to,$subject,$line1,$line2,$line3,$line4);
+		
 		
 		header('Location:'.$url.'/main/home?success'); 
 	}
@@ -320,8 +390,8 @@ class User extends MY_Controller {
 		$str_address1 = $this->input->post('str_address1');
 		$str_address2 = $this->input->post('str_address2');
 		$str_city = $this->input->post('str_city');
-		$int_state_id = $this->input->post('int_state_id');
-		$int_country_id = $this->input->post('int_country_id');
+		$str_country = $this->input->post('str_country'); 
+		$str_state = $this->input->post('str_state');
 		$str_zip = $this->input->post('str_zip');	
 		
 		/* --------------End Get Form Variables --------------*/
@@ -333,14 +403,15 @@ class User extends MY_Controller {
 		$int_user_id = $this->mUser->add($userdata);
 		------------------Add Organization ------------------------*/
 		$orgdata = array();
-		$orgdata['tbl_organization.int_user_id'] = $int_user_id;
 		$orgdata['tbl_organization.str_name'] =  $str_name;
 		$orgdata['tbl_organization.str_short_name'] = $str_name; 
 		$orgdata['tbl_organization.str_address1'] = $str_address1;
 		$orgdata['tbl_organization.str_address2'] = $str_address2;
-		$orgdata['tbl_organization.str_state'] = $int_state_id;
+		$orgdata['tbl_organization.str_state'] = $str_state;
 		$orgdata['tbl_organization.str_city'] = $str_city;
 		$orgdata['tbl_organization.str_email'] = $str_email;
+		$orgdata['tbl_organization.str_zip'] = $str_zip;
+		$orgdata['tbl_organization.str_country'] = $str_country;
 		$orgdata['tbl_organization.date_added'] = date('Y-m-d');
 		$orgdata['tbl_organization.date_modified'] = date('Y-m-d');
 		$orgdata['tbl_organization.chr_status'] = 'A';
@@ -357,7 +428,7 @@ class User extends MY_Controller {
 		$orgdata['tbl_organization.str_logo'] = $str_logo_image;
 		$int_organization_id = $this->mUser->editorganization($int_organization_id,$orgdata);
 		
-		header('Location:'.$url.'/user/organization'); 
+		header('Location:'.$url.'/user/manageorg'); 
 	}
 	
 	public function orgupdate()
@@ -380,7 +451,7 @@ class User extends MY_Controller {
 		$str_address2 = $this->input->post('str_address2');
 		$str_city = $this->input->post('str_city');
 		$str_state = $this->input->post('str_state');
-		$int_country_id = $this->input->post('str_country');
+		$str_country = $this->input->post('str_country');
 		$str_zip = $this->input->post('str_zip');	
 		$int_organization_id = $this->input->post('int_org_id');	
 		
@@ -395,6 +466,8 @@ class User extends MY_Controller {
 		$orgdata['tbl_organization.str_state'] = $str_state;
 		$orgdata['tbl_organization.str_city'] = $str_city;
 		$orgdata['tbl_organization.str_email'] = $str_email;
+		$orgdata['tbl_organization.str_zip'] = $str_zip;
+		$orgdata['tbl_organization.str_country'] = $str_country;
 		$orgdata['tbl_organization.date_added'] = date('Y-m-d');
 		$orgdata['tbl_organization.date_modified'] = date('Y-m-d');
 		$orgdata['tbl_organization.chr_status'] = 'A'; 
@@ -434,29 +507,39 @@ class User extends MY_Controller {
 		$user = $this->mUser->deleteorg($int_org_id);		
 		header('Location:'.$url.'/index.php/user/manageorg'); 
 	}
-
-	public function update()
-	{
-		$CI =& get_instance(); 
-		$url = $CI->config->config['base_url'];
-		$this->load->model('demo_model');
-		$fname = $this->input->post('fname');
-		$lname = $this->input->post('lname');
-		$age = $this->input->post('age');
-		$address = $this->input->post('address');
-		$data = array();
-		$data['users.fname'] = $fname;
-		$data['users.lname'] = $lname;
-		$data['users.age'] = $age;
-		$data['users.address'] = $address;
-		$data['users.id'] = $this->input->post('id');
-		$userid = $this->demo_model->edit($data['users.id'],$data);
-		$users  = $this->demo_model->get();
-		$data = array();
-		$data['user'] = $users;
-		$data['userid'] = 1;
-		header('Location:'.$url.'index.php/demo/listusers'); 
+	public function checkemailunique($str_email,$type)
+	{	
+		$this->load->model('mUser');
+		switch($type)
+		{
+			case 'donor':
+				$user  = $this->mUser->checkEmailUnique($str_email);
+				break;
+			case 'orguser':
+				$user = $this->mUser->checkEmailUnique($str_email);
+				break;
+		}
+		if(sizeof($user)>0)
+			print 1;
+		else
+			print 0;
+		exit;
+		
 	}
+	
+	
+	public function checkadminuserexist($int_org_id)
+	{	
+		$this->load->model('mUser');
+		$user = $this->mUser->checkadminuserexist($int_org_id);		
+		if(sizeof($user)>0)
+			print 1;
+		else
+			print 0;
+		exit;
+	}
+
+	
 	public function imageupload($img,$fieldname,$dir,$id)
 	{
 		$session_id='1'; //$session id
@@ -496,7 +579,20 @@ class User extends MY_Controller {
 											
 
 											$uploadedfile = $path.$actual_image_name;
-											$src = imagecreatefromjpeg($uploadedfile);
+											$what = getimagesize($uploadedfile);
+											switch(strtolower($what['mime']))
+											{
+												case 'image/png':
+													$src = imagecreatefrompng($uploadedfile);
+													break;
+												case 'image/jpeg':
+													$src = imagecreatefromjpeg($uploadedfile);
+													break;
+												case 'image/gif':
+													$src = imagecreatefromgif($uploadedfile);
+													break;
+												default: die();
+											}
 											list($width,$height)=getimagesize($path.$actual_image_name);
 
 											//$newwidth=800;

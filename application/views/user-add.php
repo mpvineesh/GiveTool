@@ -7,18 +7,11 @@
 ?>
 <!-- start: Content -->
 <div id="content" class="span10">			
-			
-	<ul class="breadcrumb">
-		<li>
-			<i class="icon-home"></i>
-			<a href="index.html">Home</a>
-			<i class="icon-angle-right"></i> 
-		</li>
-		<li>
-			<i class="icon-edit"></i>
-			<a href="#">Add Organization User</a>
-		</li>
-	</ul>
+	
+	<?php
+			$pagename ='Add Organization User';
+			include_once('breadcrums.php'); 
+		?>
 	
 	<div class="row-fluid sortable">
 		<div class="box span12">
@@ -33,6 +26,8 @@
 				<form class="form-horizontal" method="post" id="useradd" action="<?php echo $base_site_url;?>/user/saveorguser">
 					<input type="hidden" name="int_org_user_id" value="<?php echo $int_org_user_id;?>">
 					<input type="hidden" name="int_user_id" value="0">
+					<input type="hidden" name="email_unique"  id="email_unique" value="0" field="email" usertype="orguser">
+					<input type="hidden" name="passwordstrength"  id="passwordstrength"  value="0">
 				  <fieldset>
 					 <div class="control-group">
 						<label class="control-label" for="selectError3">Organization</label>
@@ -81,17 +76,17 @@
 						  <span class="help-inline" id="confirm-password_msg"></span>
 						</div>
 					 </div>    
-					<div class="control-group">
-						<label class="control-label">Enable Admin Privilages</label>
+					<div class="control-group" id="field-enable-admin">
+						<label class="control-label" id="label-enable-admin">Enable Admin Privilages</label>
 						<div class="controls">
 						  <label class="checkbox inline">
-							<div class="checker" id="uniform-inlineCheckbox1"><span><input type="checkbox" name="bit_is_admin" value="1" id="inlineCheckbox1"></span></div> 
+							<div class="checker"><span><input id="enable-admin" type="checkbox" name="bit_is_admin" value="1"></span></div> 
 						  </label>
 						</div>
-					  </div>
+					 </div>
 					<div class="form-actions">
 					  <button type="submit" name="btn_add" class="btn btn-primary" onClick="return validateForm('useradd')";>Save</button>
-					  <button type="reset" class="btn goback">Cancel</button>
+					  <button type="reset" class="btn goback" data="user/manageusers">Cancel</button>
 					</div>
 				  </fieldset>
 				</form>   

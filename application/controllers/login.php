@@ -23,29 +23,35 @@ class Login extends MY_Controller {
 		$res = 1; 
 		if(count($user) ==0 )
 			$res = 0;
-		if($username == 'admin' && $password =='admin'){
+		if($username == 'admin' && $password =='admin1'){
 			$res = 1;
 			$this->session->set_userdata('loggedin', '1');
 			$this->session->set_userdata('name', 'Administrator');
 			$this->session->set_userdata('int_user_type_id', 1);
 			$this->session->set_userdata('int_user_id', '1');
+			$this->session->set_userdata('bit_is_admin', '1');
 			$user_data = $this->session->all_userdata();  
 			header('Location:'.$url.'/dashboard');  
 		}else if($res == 0){
 			header('Location:'.$url.'/main/home?loginfailed'); 
-		}else{  
+		}else{
 			$this->session->set_userdata('loggedin', '1');
 			$this->session->set_userdata('int_user_type_id', $user[0]->int_user_type_id);
 			$this->session->set_userdata('int_user_id', $user[0]->int_user_id);
 			$this->session->set_userdata('name',  $user[0]->str_name);
-			
+			$this->session->set_userdata('bit_is_admin', $user[0]->bit_is_admin);
+			$bit_is_admin = $user[0]->bit_is_admin;
 			/*$this->session->set_userdata('loggedin', '1');
 			$this->session->set_userdata('user_type', 'admin');
 			$this->session->set_userdata('int_user_id', '1');*/
 			$int_user_type_id = $user[0]->int_user_type_id;
 			$user_data = $this->session->all_userdata();
-			if($int_user_type_id ==2)			
+			if($int_user_type_id ==1)			
 				header('Location:'.$url.'/dashboard');  
+			else if($int_user_type_id ==2 && $bit_is_admin == 1)			
+				header('Location:'.$url.'/user/manageusers'); 
+			else if($int_user_type_id ==2)			
+				header('Location:'.$url.'/event/manage'); 
 			else
 				header('Location:'.$url.'/main/home');  
 		} 

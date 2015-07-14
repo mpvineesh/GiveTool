@@ -4,14 +4,140 @@
 
 class Dashboard extends MY_Controller {
 
-	 
+	/* 	Author: Ulkarsh
+		Version: 1.00
+		Description: Newly added for Admin Dashboard*/
+		
+		/*public function getDashboardDetails()
+		{
+			$this->checklogin();
+		
+			$this->load->model('mUser');
+			$users = $this->mUser->getTotalUsers();
+			
+			$data = array();
+			$data['totalUsers'] = $users;
+			
+			$this->load->view('header');
+			$this->load->view('org-list',$data);
+			$this->load->view('footer');
+		}*/	
+		
+		
+	
+	
 	public function index() {
-		$this->checklogin();
+		/*$this->checklogin();
 		$this->load->view('header');
 		$this->load->view('dashboard');
-		$this->load->view('footer');
+		$this->load->view('footer');*/
+		//getDashboardDetails();
+		//Modified for dashboard change
+			$this->checklogin();
+		
+			$this->load->model('adashboard');
+			$users = $this->adashboard->getTotalUsers();
+			$organizationsCount = $this->adashboard->getTotalOrg();
+			$eventsCount = $this->adashboard->getTotalEvents();
+			$totalDonationAmount = $this->adashboard->getTotalDonationAmount();
+			$allOrganizations = $this->adashboard->getAllOrganizations();
+			$weeklyNewUsersAdded = $this->adashboard->getWeeklyNewUsersAdded();
+			$weeklyNewOrganizationsAdded= $this->adashboard->getWeeklyNewOrganizationsAdded();
+			$weeklyNewDonorsAdded= $this->adashboard->getWeeklyNewDonorsAdded();
+			$weeklyNumberOfDonations= $this->adashboard->getWeeklyNumberOfDonations();
+			$weeklyTotalDonationAmount= $this->adashboard->getWeeklyTotalDonationAmount();
+			$weeklyNewEvents= $this->adashboard->getWeeklyNewEvents();
+			$thisWeeksEvents= $this->adashboard->getThisWeeksEvents();
+			$RecentActivity= $this->adashboard->getRecentActivity();
+			$totalSiteHits = $this->adashboard->getTotalSiteHits();
+			$distinctSiteHits = $this->adashboard->getDistinctSiteHits();
+			$totalEventHits = $this->adashboard->getTotalEventHits();
+			$distinctEventHits = $this->adashboard->getDistinctEventHits();
+			$percentageNewVisitors = $this->get_percentage($totalSiteHits->int_views,$distinctSiteHits);
+			$percentageReturningVisitors = $this->get_percentage($totalSiteHits->int_views,$totalSiteHits->int_views-$distinctSiteHits);
+			
+			$data = array();
+			$data['totalUsers'] = $users;
+			$data['totalOrgs'] = $organizationsCount;
+			$data['totalEvents'] = $eventsCount;
+			$data['donationAmount'] = $totalDonationAmount;
+			$data['allorgs'] = $allOrganizations;
+			$data['weeklyNewUsers'] = $weeklyNewUsersAdded;
+			$data['weeklyNewOrganizationsAdded'] = $weeklyNewOrganizationsAdded;
+			$data['weeklyNewDonorsAdded'] = $weeklyNewDonorsAdded;
+			$data['weeklyNumberOfDonations'] = $weeklyNumberOfDonations;
+			$data['weeklyTotalDonationAmount'] = $weeklyTotalDonationAmount;
+			$data['weeklyNewEvents'] = $weeklyNewEvents;			
+			$data['thisWeeksEvents'] = $thisWeeksEvents;
+			$data['RecentActivity1'] = $RecentActivity;			
+			$data['totalSiteHits'] = $totalSiteHits;
+			$data['distinctSiteHits'] = $distinctSiteHits;
+			$data['totalEventHits'] = $totalEventHits;
+			$data['distinctEventHits'] = $distinctEventHits;
+			$data['percentageReturningVisitors']=$percentageReturningVisitors;
+			$data['percentageNewVisits']=$percentageNewVisitors;
+			
+			$this->load->view('header');
+			$this->load->view('dashboard',$data);
+			$this->load->view('footer');
 	}
 	
+	public function get_percentage($denominator,$numerator)
+	{
+		if($denominator >0)
+			$result=$numerator/$denominator;
+		else
+			$result=0;
+			
+		return $result;
+	}
+	
+	public function get_action()
+	{
+		$this->checklogin();
+		$year = $this->input->get('year');
+		$month = $this->input->get('month');	
+		$this->load->model('adashboard');
+		$result = $this->adashboard->getTotalDonationByMonthAndYear($month,$year);
+		//$result = $month;
+		$result = round($result->flt_amount,2);
+		if($result=='')
+		{
+			$result=0;
+		}
+		echo $result;		
+	}
+	
+	public function get_Organization_donation_summary()
+	{
+		//$this->checklogin();
+		$orgid = $this->input->get('org');		
+		$this->load->model('adashboard');
+		$result = $this->adashboard->get_Organization_donation_summary($orgid);
+		//$result = $month;
+		$result = round($result->flt_amount,2);
+		if($result=='')
+		{
+			$result=0;
+		}
+		echo $result;		
+	}
+	
+	public function get_total_summary()
+	{
+		$this->checklogin();			
+		$this->load->model('adashboard');
+		$result = $this->adashboard->getTotalDonationAmount();
+		//$result = $month;
+		$result = round($result->flt_amount,2);
+		if($result=='')
+		{
+			$result=0;
+		}
+		echo $result;		
+	}
+	
+	/*Author Ulkarsh - New addition ends*/	
 	public function authenticate()
 	{	
 		$this->load->library('session');
